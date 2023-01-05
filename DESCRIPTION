@@ -1,0 +1,19 @@
+Package: cloudbrewr
+Title: DataBrew Internal Tooling for AWS Data Load / Storage
+Version: 0.0.0.9000
+Authors@R: person("Aryton", "Tediarjo", email = "atediarjo@gmail.com",
+                  role = c("aut", "cre"))
+Description: This package is used as an internal tool for interaction with data in AWS
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.2
+Imports:
+  dplyr,
+  tidyr,
+  paws,
+  glue,
+  lubridate,
+  data.table,
+  purrr
