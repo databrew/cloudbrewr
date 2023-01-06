@@ -75,7 +75,7 @@ check_aws_access <-  function(){
   tryCatch({
     sts <- paws::sts()
     identity <- sts$get_caller_identity()
-    msg_content <- glue(
+    msg_content <- glue::glue(
       '[CLOUDBREWR_LOGS]: Welcome to AWS @DataBrew!',
       '\n',
       'You are logged in to {profile_name}',
