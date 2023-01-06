@@ -17,14 +17,3 @@ aws_s3_store <- function(filename, bucket, key, ...){
     stop(e$message)
   })
 }
-
-
-
-
-
-
-
-
-
-
-
