@@ -1,18 +1,17 @@
-#' Wrapper function to retrieving object into time-series dataa
+#' Function to retrieve S3 folder-partitioned table into time-series data
+#' @description Wrapper to bind folder-partitioned table into time-series, indexed by run_date
 #' @param bucket s3 bucket
 #' @param key object key
 #' @param namespace_bucket boolean for bucket namespacing, set to FALSE to override namespace
-#' @param date_range:  date range min/max of date partition
-#'
-#' @import data.table
-#'
+#' @param ... argument on s3 api on list_objects_v2
+#' @param date_range date range min/max of date partition
 #' @return tibble dataframe with run-date index
 #' @export
-aws_get_table_ts <-  function(bucket,
-                              key,
-                              namespace_bucket = TRUE,
-                              date_range = NULL,
-                              ...){
+aws_s3_get_table_ts <-  function(bucket,
+                                 key,
+                                 namespace_bucket = TRUE,
+                                 date_range = NULL,
+                                 ...){
   tryCatch({
     # authenticate to s3
     s3obj <- paws::s3()
@@ -41,8 +40,9 @@ aws_get_table_ts <-  function(bucket,
       tidyr::drop_na(run_date) %>%
       dplyr::mutate(
         data = purrr::map(Key, function(iter_key){
-          objs <- aws_get_object(bucket, iter_key)
-          fread(objs$file_path)})) %>%
+          objs <- aws_s3_get_table(bucket, iter_key)
+          })
+        ) %>%
       dplyr::select(data) %>%
       tidyr::unnest(data)
     # return(hist_data)
@@ -51,17 +51,19 @@ aws_get_table_ts <-  function(bucket,
   })
 }
 
-#' Wrapper function to retrieving object into table format data
-#' @inheritParams aws_get_object
-#' @import data.table
-#'
-#' @return tibble data-frame
+#' Function to retrieve s3 object directly into table
+#' @description wrapper function to transform s3 into tibble
+#' @inheritParams aws_s3_get_object
+#' @importFrom magrittr %>%
+#' @importFrom data.table fread
+#' @return tibble data-frame of s3 object
 #' @export
-aws_get_table <- function(bucket,
-                          key,
-                          namespace_bucket = TRUE,
-                          ...){
-  object_metadata <- aws_get_object(bucket, key, ...)
-  table <- fread(object_metadata$file_path)
+aws_s3_get_table <- function(bucket,
+                             key,
+                             namespace_bucket = TRUE,
+                             ...){
+  object_metadata <- aws_s3_get_object(bucket, key, ...)
+  table <- fread(object_metadata$file_path) %>%
+    tibble::as_tibble()
   return(table)
 }

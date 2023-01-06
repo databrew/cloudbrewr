@@ -16,4 +16,8 @@ Imports:
   glue,
   lubridate,
   data.table,
-  purrr
+  purrr,
+  tools,
+  magrittr,
+  rlang,
+  tibble

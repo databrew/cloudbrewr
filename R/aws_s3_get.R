@@ -1,10 +1,15 @@
-#' get s3 data catalog for databrew files
-#' @inheritParams aws_get_object
-#' @return returns databrew.org data catalog
+#' Get DataBrew S3 object catalog
+#' @description Get catalog of files used in S3
+#'
+#' @inheritParams aws_s3_get_object
+#'
+#' @importFrom magrittr %>%
+#'
+#' @return tibble of S3 file catalog
 #' @export
-aws_get_data_catalog <- function(bucket,
-                                 namespace_bucket = TRUE,
-                                 ...){
+aws_s3_get_catalog <- function(bucket,
+                               namespace_bucket = TRUE,
+                               ...){
   tryCatch({
     s3obj <- paws::s3()
     if(namespace_bucket){
@@ -14,20 +19,29 @@ aws_get_data_catalog <- function(bucket,
       .$Contents %>%
       purrr::map_dfr(~.x) %>%
       dplyr::mutate(folder = dirname(Key)) %>%
-      tidyr::separate(folder, c("project", "pipeline_folder", "pipeline_subfolder"), sep = "/")
+      tidyr::separate(folder,
+                      c("project",
+                        "pipeline_folder",
+                        "pipeline_subfolder"),
+                      sep = "/")
   }, error = function(e){
     stop(e$message)
   })
 }
 
-#' get object version history in s3
-#' @inheritParams aws_get_object
-#' @return returns tibble of object version history
+#' Get object version history in s3
+#' @description Get object version change history
+#'
+#' @inheritParams aws_s3_get_object
+#'
+#' @importFrom magrittr %>%
+#'
+#' @return tibble of S3 object version history
 #' @export
-aws_get_object_version_history <- function(bucket,
-                                           key,
-                                           namespace_bucket = TRUE,
-                                           ...){
+aws_s3_get_object_version_history <- function(bucket,
+                                              key,
+                                              namespace_bucket = TRUE,
+                                              ...){
   tryCatch({
     # authenticate to s3
     s3obj <- paws::s3()
@@ -48,17 +62,20 @@ aws_get_object_version_history <- function(bucket,
   })
 }
 
-#' get object in s3
+#' Get Object in DataBrew S3
 #' @param bucket s3 bucket
 #' @param key s3 object key
 #' @param namespace_bucket boolean to create namespace bucket, set to FALSE to override bucket namespace
 #' @param ... additional parameter from S3 get object
+#'
+#' @importFrom magrittr %>%
+#'
 #' @return list of object s3 metadata and file location
 #' @export
-aws_get_object <- function(bucket,
-                           key,
-                           namespace_bucket = TRUE,
-                           ...){
+aws_s3_get_object <- function(bucket,
+                              key,
+                              namespace_bucket = TRUE,
+                              ...){
   tryCatch({
     # authenticate to s3
     s3obj <- paws::s3()
@@ -70,6 +87,7 @@ aws_get_object <- function(bucket,
     metadata <- s3obj$get_object(
       Bucket = bucket, Key = key, ...)
 
+    # output metadata
     output <- list(
       bucket = bucket,
       object_key = key,

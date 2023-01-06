@@ -1,5 +1,11 @@
-#' Function to store file to S3 storage
-aws_store <- function(filename, bucket, key, multipart = FALSE, ...){
+#' Function to store object to S3
+#' @description Store any object to S3 (limited to <=5GB per object)
+#' @param filename your filename
+#' @param bucket s3 bucket
+#' @param key s3 object key
+#' @param ... additional parameter passed to s3 put_object
+#' @export
+aws_s3_store <- function(filename, bucket, key, ...){
   tryCatch({
     s3obj <- paws::s3()
     if(namespace_bucket){

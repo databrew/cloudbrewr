@@ -1,3 +1,4 @@
+#' Function to get prod/dev parameters
 call_cloudbrewr_env_params <- function(){
   list(
     dev = list(
@@ -13,6 +14,12 @@ call_cloudbrewr_env_params <- function(){
 }
 
 
+#' Function to namespace bucket based on prod/dev environment
+#' @importFrom magrittr %>%
+#'
+#' @param bucket databrew s3 bucket
+#'
+#' @return namspaced buckeet
 aws_namespace <- function(bucket){
   sts <- paws::sts()
   aws_caller <- sts$get_caller_identity()
@@ -23,12 +30,11 @@ aws_namespace <- function(bucket){
     purrr::map(~.x$account_id == aws_caller$Account) %>%
     unlist() %>%
     which() %>%
-    names(.)
+    names()
 
   bucket_with_namespace <- glue::glue(
     "{aws_env[[current_env]]$bucket_prefix}",
     bucket)
 
   return(bucket_with_namespace)
-
 }
