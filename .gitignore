@@ -41,5 +41,3 @@ vignettes/*.pdf
 # ignore renv lock
 renv.lock
 *renv/
-inst/doc
-docs

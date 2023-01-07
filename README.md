@@ -18,5 +18,10 @@ Installation can be done through github installation:
 devtools::install_github('databrew/cloudbrewr')
 ```
 
-## Vignettes
-Coming soon!
+## Documentation
+
+Check out our team Vignettes here in [Github Pages](http://www.databrew.cc/cloudbrewr/)
+
+## Contributing
+
+Coming soon
