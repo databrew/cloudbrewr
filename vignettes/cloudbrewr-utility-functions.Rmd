@@ -1,0 +1,89 @@
+---
+title: "cloudbrewr-utility-functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cloudbrewr-utility-functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(cloudbrewr)
+library(data.table)
+library(dplyr)
+```
+
+
+## About
+
+This section covers some utility function is used that can help your daily S3 usage. Here are some utility functions in CloudBrewR
+
+### Get S3 Data Catalog
+This function is used to get the catalog of files under databrew.org bucket. It will crawl all objects inside the S3 folder
+```{r}
+aws_s3_get_catalog(
+  bucket = 'databrew.org') %>% 
+  head(5)
+```
+
+To narrow down your catalog search:
+```{r}
+aws_s3_get_catalog(
+  bucket = 'databrew.org',
+  Prefix = 'kwale/clean-form/') %>% 
+  head(5)
+```
+
+
+### Get S3 Object Versioning History
+This function is used to get an object versioning history (notated by VersionId) metadata
+```{r}
+aws_s3_get_object_version_history(
+  bucket = 'databrew.org', 
+  key = 'kwale/raw-form/reconaregistration/reconaregistration.csv') %>% 
+  head(5)
+```
+
+
+### Get Table Directly from S3
+Wrapper function to get table-like data directly from S3
+```{r}
+aws_s3_get_table(
+  bucket = 'databrew.org', 
+  key = 'bohemiatesting-ke/raw-form/reconregistration/reconregistration.csv') %>% 
+  head(5) %>% 
+  dplyr::select(SubmissionDate)
+```
+
+### Get Files Partitioned in Folder
+When working with Data Lakes in S3, one of the most commons strategy is to save .csv files into folders/partitions. One of the use-case is in storing Anomalies per Day. 
+
+It is structured in S3 with partitions, so that we are able to take snapshots of how many anomalies are identified during Recon, format is as follows:
+
+`databrew.org/kwale/anomalies/anomalies-identification-history/run_date={YYYY}-{MM}-{DD}`
+
+You can query the data into rowwwise format by running, indexed by `run_date` by running
+```{r}
+aws_s3_get_table_ts(
+  bucket = 'databrew.org', 
+  key = 'kwale/anomalies/anomalies-identification-history/') %>% 
+  head(5) %>% 
+  dplyr::select(run_date,type)
+```
+
+You can also repurpose this to fetch specific date-range only to not over-extract your partitioned files.
+```{r}
+aws_s3_get_table_ts(
+  bucket = 'databrew.org', 
+  key = 'kwale/anomalies/anomalies-identification-history/',
+  date_range = c('2023-01-01', '2023-01-05')) %>% 
+  head(5) %>% 
+  dplyr::select(run_date,type)
+```

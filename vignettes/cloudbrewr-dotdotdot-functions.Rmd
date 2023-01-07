@@ -1,0 +1,43 @@
+---
+title: "cloudbrewr-dotdotdot-functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cloudbrewr-dotdotdot-functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(cloudbrewr)
+library(dplyr)
+```
+
+## What is Dot Dot Dot function in R?
+It means that the function is designed to take any number of named or unnamed arguments. Just like Python `*kwargs` parameter
+
+## How do we use it in this library?
+Say you are getting an object from S3 and you realize that you might need an extra parameter in your `s3 get object`. 
+
+`aws_s3_get_object` is built with `...`, and you can find extra parameter that you can use from the [Paws official API Docs](https://paws-r.github.io/docs/s3/get_object.html). 
+
+So, you are able to modify your S3 get with some specific versioning needs by:
+```{r}
+aws_s3_get_object(
+  bucket = 'databrew.org',
+  key = 'kwale/raw-form/reconbhousehold/reconbhousehold.csv',
+  VersionId = 'NaFvmYr2_E3x57xPBMmyvaK6Ar3fi1k7' # represents the 3 dots
+) %>% head(5)
+```
+
+
+
+
+
+

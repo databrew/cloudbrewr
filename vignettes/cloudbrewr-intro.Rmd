@@ -1,8 +1,8 @@
 ---
-title: "cloudbrewr-vignette"
+title: "cloudbrewr-intro"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{cloudbrewr-vignette}
+  %\VignetteIndexEntry{cloudbrewr-intro}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -45,7 +45,9 @@ object <- aws_s3_get_object(
 
 Running the object getter will give user with the metadata of the object, starting from item size `content_length`, `version_id`, and other s3-related information. To read .csv file locally run:
 ```{r}
-data <- fread(object$file_path) %>% head(5)
+data <- fread(object$file_path) %>% 
+  dplyr::select(SubmissionDate) %>%
+  head(5)
 data
 ```
 
@@ -58,7 +60,8 @@ data %>% fwrite(tempfile)
 aws_s3_store(
   filename = tempfile, 
   bucket = 'databrew.org', 
-  key = 'bohemiatesting-ke/test.csv')
+  key = 'bohemiatesting-ke/test.csv',
+  namespace_bucket = TRUE)
 ```
 
 
