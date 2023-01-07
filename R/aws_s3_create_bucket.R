@@ -5,6 +5,7 @@
 #' @export
 aws_s3_create_bucket <- function(bucket, ...){
   tryCatch({
+    s3obj <- paws::s3()
     s3obj$create_bucket(Bucket = bucket, ...)
     profile_name <- Sys.getenv('AWS_PROFILE')
     message(glue::glue("[CLOUDBREWR_LOGS]: {bucket} is created in {profile_name}"))
