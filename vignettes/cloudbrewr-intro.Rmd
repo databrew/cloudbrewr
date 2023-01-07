@@ -1,8 +1,8 @@
 ---
-title: "cloudbrewr-intro"
+title: "CloudBrewR S3 Introduction"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{cloudbrewr-intro}
+  %\VignetteIndexEntry{CloudBrewR S3 Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

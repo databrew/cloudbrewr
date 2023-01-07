@@ -1,8 +1,8 @@
 ---
-title: "cloudbrewr-utility-functions"
+title: "CloudBrewR S3 Utility Functions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{cloudbrewr-utility-functions}
+  %\VignetteIndexEntry{CloudBrewR S3 Utility Functions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -30,7 +30,8 @@ This function is used to get the catalog of files under databrew.org bucket. It 
 ```{r}
 aws_s3_get_catalog(
   bucket = 'databrew.org') %>% 
-  head(5)
+  head(5) %>% 
+  dplyr::select(Key, LastModified, Size)
 ```
 
 To narrow down your catalog search:
@@ -38,7 +39,8 @@ To narrow down your catalog search:
 aws_s3_get_catalog(
   bucket = 'databrew.org',
   Prefix = 'kwale/clean-form/') %>% 
-  head(5)
+  head(5) %>% 
+  dplyr::select(Key, LastModified, Size)
 ```
 
 
@@ -48,7 +50,8 @@ This function is used to get an object versioning history (notated by VersionId)
 aws_s3_get_object_version_history(
   bucket = 'databrew.org', 
   key = 'kwale/raw-form/reconaregistration/reconaregistration.csv') %>% 
-  head(5)
+  head(5) %>% 
+  dplyr::select(Key, Size, LastModified, VersionId)
 ```
 
 

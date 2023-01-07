@@ -1,8 +1,8 @@
 ---
-title: "cloudbrewr-dotdotdot-functions"
+title: "CloudBrewR Three Dot Ellipsis Parameter"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{cloudbrewr-dotdotdot-functions}
+  %\VignetteIndexEntry{CloudBrewR Three Dot Ellipsis Parameter}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
