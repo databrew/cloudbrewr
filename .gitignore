@@ -37,3 +37,8 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# ignore renv lock
+renv.lock
+*renv/
+inst/doc

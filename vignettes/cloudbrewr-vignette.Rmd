@@ -1,0 +1,64 @@
+---
+title: "cloudbrewr-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cloudbrewr-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(cloudbrewr)
+library(data.table)
+library(dplyr)
+```
+
+### Log in to AWS @DataBrew
+```{r eval = FALSE}
+aws_login()
+```
+
+After running login, depending in your session there will be two login types. 
+
+- Interactive Session (RStudio, RSession): Function will trigger SSO login through our [DataBrew AWS Portal](https://databrewllc.awsapps.com/start#/)
+
+- Bash / EC2 / Containers: Function will prompt user to export access keys directly from our  
+[DataBrew AWS Portal](https://databrewllc.awsapps.com/start#/). This is more representative of production data pipeline that uses IAM Roles
+
+### Get an Object from S3
+```{r}
+aws_s3_get_object(
+  bucket = 'databrew.org', 
+  key = 'bohemiatesting-ke/raw-form/reconhh/reconhh.csv')
+
+object <- aws_s3_get_object(
+  bucket = 'databrew.org', 
+  key = 'bohemiatesting-ke/raw-form/reconhh/reconhh.csv')
+```
+
+Running the object getter will give user with the metadata of the object, starting from item size `content_length`, `version_id`, and other s3-related information. To read .csv file locally run:
+```{r}
+data <- fread(object$file_path) %>% head(5)
+data
+```
+
+### Storing an Object to S3 bucket
+
+Say you want to save the output again to S3, this is the procedure to store the data:
+```{r}
+tempfile <- tempfile(fileext = ".csv")
+data %>% fwrite(tempfile)
+aws_s3_store(
+  filename = tempfile, 
+  bucket = 'databrew.org', 
+  key = 'bohemiatesting-ke/test.csv')
+```
+
+
