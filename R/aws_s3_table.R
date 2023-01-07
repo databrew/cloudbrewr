@@ -28,7 +28,7 @@ aws_s3_get_table_ts <-  function(bucket,
       dplyr::mutate(run_date = basename(dirname(Key))) %>%
       tidyr::separate(run_date, c("tmp", "run_date"), "=") %>%
       dplyr::mutate(run_date = lubridate::as_date(run_date)) %>%
-      distinct(run_date, .keep_all = TRUE)
+      dplyr::distinct(run_date, .keep_all = TRUE)
 
     # filter
     if(!is.null(date_range)){

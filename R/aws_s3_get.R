@@ -55,7 +55,7 @@ aws_s3_get_object_version_history <- function(bucket,
     # get metadata
     version_history <- list_obj_history %>%
       purrr::map_dfr(~.x) %>%
-      distinct(VersionId, .keep_all = TRUE)
+      dplyr::distinct(VersionId, .keep_all = TRUE)
     return(version_history)
   }, error = function(e){
     stop(e$message)
