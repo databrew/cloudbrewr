@@ -3,9 +3,10 @@
 #' @param filename your filename
 #' @param bucket s3 bucket
 #' @param key s3 object key
+#' @param namespace_bucket boolean on whether to namespace bucket based on prod/dev environment
 #' @param ... additional parameter passed to s3 put_object
 #' @export
-aws_s3_store <- function(filename, bucket, key, ...){
+aws_s3_store <- function(filename, bucket, key, namespace_bucket = TRUE, ...){
   tryCatch({
     s3obj <- paws::s3()
     if(namespace_bucket){

@@ -4,7 +4,7 @@
 \alias{aws_s3_store}
 \title{Function to store object to S3}
 \usage{
-aws_s3_store(filename, bucket, key, ...)
+aws_s3_store(filename, bucket, key, namespace_bucket = TRUE, ...)
 }
 \arguments{
 \item{filename}{your filename}
@@ -12,6 +12,8 @@ aws_s3_store(filename, bucket, key, ...)
 \item{bucket}{s3 bucket}
 
 \item{key}{s3 object key}
+
+\item{namespace_bucket}{boolean on whether to namespace bucket based on prod/dev environment}
 
 \item{...}{additional parameter passed to s3 put_object}
 }
