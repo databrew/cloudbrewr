@@ -65,7 +65,10 @@ aws_s3_get_table <- function(bucket,
                              key,
                              namespace_bucket = TRUE,
                              ...){
-  object_metadata <- aws_s3_get_object(bucket, key, ...)
+  object_metadata <- aws_s3_get_object(
+    bucket,
+    key,
+    namespace_bucket = namespace_bucket)
   table <- fread(object_metadata$file_path) %>%
     tibble::as_tibble()
   return(table)
