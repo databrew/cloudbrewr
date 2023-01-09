@@ -1,13 +1,13 @@
 #' Function to initiate SSO authentication
 #' @description Instantiate SSO connection using internet browser
 #' @param profile_name the profile name set to prod/dev
+#' @importFrom glue glue
 aws_sso_authenticate <- function(profile_name){
   tryCatch({
-    aws_args <- glue::glue("sso login --profile {profile_name}")
+    aws_args <- paste0(glue::glue("sso login --profile {profile_name}"))
     system2(
       command = "aws",
       args = aws_args)
-    Sys.setenv(AWS_PROFILE  =  profile_name)
   }, error = function(e){
     message(e$message)
   })
@@ -27,21 +27,11 @@ aws_configure <- function(env) {
 
   tryCatch({
     # create dev sso account in aws config
-    config_defaults$sso_account_id <- env$dev$account_id
+    config_defaults$sso_account_id <- env$account_id
     purrr::map(names(config_defaults), function(key){
       aws_arg_input <- glue::glue(
         'configure set {key} {config_defaults[[key]]} ',
-        '--profile {env$dev$profile_name}')
-      # create new profile
-      system2(command = "aws", args = c(aws_arg_input))
-    })
-
-    # create prod sso account in aws config
-    config_defaults$sso_account_id <- env$prod$account_id
-    purrr::map(names(config_defaults), function(key){
-      aws_arg_input <- glue::glue(
-        'configure set {key} {config_defaults[[key]]} ',
-        '--profile {env$prod$profile_name}')
+        '--profile {env$profile_name}')
       # create new profile
       system2(command = "aws", args = c(aws_arg_input))
     })
@@ -55,15 +45,16 @@ aws_configure <- function(env) {
 #' @description To send user message on completion of AWS Environment Variables
 check_aws_environment_variables <- function(){
   message('Checking exported environment variables')
+  portal_url <- 'https://databrewllc.awsapps.com/start#/'
   if(Sys.getenv("AWS_ACCESS_KEY_ID") == "" |
      is.null(Sys.getenv("AWS_ACCESS_KEY_ID"))){
-    stop('[CLOUDBREWR_LOGS]: Please export Access Keys from https://databrewllc.awsapps.com/start#/')
+    stop(glue::glue('[CLOUDBREWR_LOGS]: Please export Access Keys from {portal_url}'))
   } else if (Sys.getenv("AWS_SECRET_ACCESS_KEY") == "" |
              is.null(Sys.getenv("AWS_SECRET_ACCESS_KEY"))){
-    stop('[CLOUDBREWR_LOGS]: Please export Secret Access Keys from https://databrewllc.awsapps.com/start#/')
+    stop(glue::glue('[CLOUDBREWR_LOGS]: Please export Secret Access Keys from {portal_url}'))
   } else if (Sys.getenv("AWS_SESSION_TOKEN") == "" |
              is.null(Sys.getenv("AWS_SESSION_TOKEN"))){
-    stop('[CLOUDBREWR_LOGS]: Please export Session Token from https://databrewllc.awsapps.com/start#/')
+    stop(glue::glue('[CLOUDBREWR_LOGS]: Please export Session Token from {portal_url}'))
   } else{
     message('[CLOUDBREWR_LOGS]: Authenticating using AWS Environment Variable')
   }
@@ -91,31 +82,29 @@ check_aws_access <-  function(){
 #' Utility Function to login to DataBrew AWS.
 #' If user is in an interactive session, generate all the required credentials to run SSO.
 #' If user is running in Terminal / bash / workflow / VM prompt to export temporary credentials
-#' @param prod choose prod/dev AWS account
+#' @param stage choose production/develop stage
 #' @return metadata of AWS STS authentication (Account, Role)
 #' @export
-aws_login <- function(prod = TRUE) {
+aws_login <- function(stage = 'prod') {
   # get prod/dev account
-  aws_env <- call_cloudbrewr_env_params()
-
-  # set profile names
-  if(prod){
-    profile_name <- aws_env$prod$profile_name
-  }else{
-    profile_name <- aws_env$dev$profile_name
-  }
+  aws_env <- call_cloudbrewr_stage_env_variables(stage = stage)
 
   # run SSO if you are running interactive RStudio
   if(interactive()){
     # configure sso in aws config
     aws_configure <- aws_configure(env = aws_env)
-    aws_sso_authenticate(profile_name = profile_name)
+    aws_sso_authenticate(profile_name = aws_env$profile_name)
+
   # else run with exported environment variables
   }else{
     # check aws environment variables availability
     check_aws_environment_variables()
   }
   # check if you have access, return role, account metadata if succeed
+  Sys.setenv(STAGE = stage)
+  Sys.setenv(AWS_PROFILE  = aws_env$profile_name)
+
+  # check access
   check_aws_access()
 }
 

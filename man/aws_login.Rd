@@ -6,10 +6,10 @@
 If user is in an interactive session, generate all the required credentials to run SSO.
 If user is running in Terminal / bash / workflow / VM prompt to export temporary credentials}
 \usage{
-aws_login(prod = TRUE)
+aws_login(stage = "prod")
 }
 \arguments{
-\item{prod}{choose prod/dev AWS account}
+\item{stage}{choose production/develop stage}
 }
 \value{
 metadata of AWS STS authentication (Account, Role)

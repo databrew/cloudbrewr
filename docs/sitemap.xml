@@ -7,9 +7,6 @@
     <loc>/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/articles/cloudbrewr-dotdotdot-functions.html</loc>
-  </url>
-  <url>
     <loc>/articles/cloudbrewr-intro.html</loc>
   </url>
   <url>
@@ -58,10 +55,13 @@
     <loc>/reference/aws_s3_store.html</loc>
   </url>
   <url>
+    <loc>/reference/aws_s3_sync.html</loc>
+  </url>
+  <url>
     <loc>/reference/aws_sso_authenticate.html</loc>
   </url>
   <url>
-    <loc>/reference/call_cloudbrewr_env_params.html</loc>
+    <loc>/reference/call_cloudbrewr_stage_env_variables.html</loc>
   </url>
   <url>
     <loc>/reference/check_aws_access.html</loc>

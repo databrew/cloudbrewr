@@ -18,3 +18,7 @@ aws_s3_store <- function(filename, bucket, key, namespace_bucket = TRUE, ...){
     stop(e$message)
   })
 }
+
+#' aws_s3_sync <- function(manifest){
+#'   #' bucket, key,
+#' }
