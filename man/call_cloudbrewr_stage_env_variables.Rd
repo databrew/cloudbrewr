@@ -6,10 +6,10 @@
 use this to retrieve environment variables used for
 S3 bucket namespace and profile name to your environment variables.}
 \usage{
-call_cloudbrewr_stage_env_variables(stage)
+call_cloudbrewr_stage_env_variables(pipeline_stage)
 }
 \arguments{
-\item{stage}{values \code{prod}, \code{dev}}
+\item{pipeline_stage}{choose production/develop stage}
 }
 \description{
 Function to get prod/dev stage environment variables,

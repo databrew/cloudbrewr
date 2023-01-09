@@ -82,12 +82,12 @@ check_aws_access <-  function(){
 #' Utility Function to login to DataBrew AWS.
 #' If user is in an interactive session, generate all the required credentials to run SSO.
 #' If user is running in Terminal / bash / workflow / VM prompt to export temporary credentials
-#' @param stage choose production/develop stage
+#' @param pipeline_stage (optional) choose production/develop stage
 #' @return metadata of AWS STS authentication (Account, Role)
 #' @export
-aws_login <- function(stage = 'prod') {
+aws_login <- function(pipeline_stage = 'production') {
   # get prod/dev account
-  aws_env <- call_cloudbrewr_stage_env_variables(stage = stage)
+  aws_env <- call_cloudbrewr_stage_env_variables(pipeline_stage = pipeline_stage)
 
   # run SSO if you are running interactive RStudio
   if(interactive()){
@@ -101,7 +101,7 @@ aws_login <- function(stage = 'prod') {
     check_aws_environment_variables()
   }
   # check if you have access, return role, account metadata if succeed
-  Sys.setenv(STAGE = stage)
+  Sys.setenv(PIPELINE_STAGE = pipeline_stage)
   Sys.setenv(AWS_PROFILE  = aws_env$profile_name)
 
   # check access
