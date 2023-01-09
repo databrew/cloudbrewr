@@ -40,7 +40,10 @@ aws_s3_get_table_ts <-  function(bucket,
       tidyr::drop_na(run_date) %>%
       dplyr::mutate(
         data = purrr::map(Key, function(iter_key){
-          objs <- aws_s3_get_table(bucket, iter_key)
+          objs <- aws_s3_get_table(
+            bucket = bucket,
+            key = iter_key,
+            namespace_bucket = FALSE)
           })
         ) %>%
       dplyr::select(data) %>%
