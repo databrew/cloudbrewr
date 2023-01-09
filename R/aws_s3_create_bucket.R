@@ -4,7 +4,7 @@
 #' @param namespace_bucket namespace bucket for prod/dev
 #' @param ... additional parameter passed to s3 create_bucket endpoint
 #' @export
-aws_s3_create_bucket <- function(bucket, namespace_bucket, ...){
+aws_s3_create_bucket <- function(bucket, namespace_bucket = TRUE, ...){
   tryCatch({
     if(namespace_bucket){
       bucket <- aws_namespace(bucket)

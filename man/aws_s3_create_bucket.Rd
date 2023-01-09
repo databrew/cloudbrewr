@@ -4,7 +4,7 @@
 \alias{aws_s3_create_bucket}
 \title{Function to create S3 bucket}
 \usage{
-aws_s3_create_bucket(bucket, namespace_bucket, ...)
+aws_s3_create_bucket(bucket, namespace_bucket = TRUE, ...)
 }
 \arguments{
 \item{bucket}{s3 bucket}
