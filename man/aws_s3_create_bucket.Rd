@@ -4,10 +4,12 @@
 \alias{aws_s3_create_bucket}
 \title{Function to create S3 bucket}
 \usage{
-aws_s3_create_bucket(bucket, ...)
+aws_s3_create_bucket(bucket, namespace_bucket, ...)
 }
 \arguments{
 \item{bucket}{s3 bucket}
+
+\item{namespace_bucket}{namespace bucket for prod/dev}
 
 \item{...}{additional parameter passed to s3 create_bucket endpoint}
 }
