@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{aws_namespace}
 \alias{aws_namespace}
-\title{Function to namespace bucket based on prod/dev environment}
+\title{Function to namespace bucket}
 \usage{
 aws_namespace(bucket)
 }
@@ -13,5 +13,5 @@ aws_namespace(bucket)
 namspaced buckeet
 }
 \description{
-Function to namespace bucket based on prod/dev environment
+This function is used to namespace bucket based on pipelines stages
 }

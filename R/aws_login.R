@@ -80,6 +80,7 @@ check_aws_access <-  function(){
 
 
 #' Utility Function to login to DataBrew AWS.
+#' @description
 #' If user is in an interactive session, generate all the required credentials to run SSO.
 #' If user is running in Terminal / bash / workflow / VM prompt to export temporary credentials
 #' @param pipeline_stage (optional) choose production/develop stage

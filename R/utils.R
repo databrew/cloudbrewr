@@ -1,6 +1,8 @@
 #' Function to get prod/dev stage environment variables,
-#' use this to retrieve environment variables used for
-#' S3 bucket namespace and profile name to your environment variables.
+#' @description
+#' Retrieve environment variables used for
+#' S3 bucket namespace and profile name to
+#' your environment variables.
 #' @param pipeline_stage choose production/develop stage
 call_cloudbrewr_stage_env_variables <- function(pipeline_stage){
   if(pipeline_stage == 'develop'){
@@ -20,11 +22,10 @@ call_cloudbrewr_stage_env_variables <- function(pipeline_stage){
 }
 
 
-#' Function to namespace bucket based on prod/dev environment
+#' Function to namespace bucket
+#' @description This function is used to namespace bucket based on pipelines stages
 #' @importFrom magrittr %>%
-#'
 #' @param bucket databrew s3 bucket
-#'
 #' @return namspaced buckeet
 aws_namespace <- function(bucket){
   sts <- paws::sts()

@@ -2,9 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{call_cloudbrewr_stage_env_variables}
 \alias{call_cloudbrewr_stage_env_variables}
-\title{Function to get prod/dev stage environment variables,
-use this to retrieve environment variables used for
-S3 bucket namespace and profile name to your environment variables.}
+\title{Function to get prod/dev stage environment variables,}
 \usage{
 call_cloudbrewr_stage_env_variables(pipeline_stage)
 }
@@ -12,7 +10,7 @@ call_cloudbrewr_stage_env_variables(pipeline_stage)
 \item{pipeline_stage}{choose production/develop stage}
 }
 \description{
-Function to get prod/dev stage environment variables,
-use this to retrieve environment variables used for
-S3 bucket namespace and profile name to your environment variables.
+Retrieve environment variables used for
+S3 bucket namespace and profile name to
+your environment variables.
 }

@@ -2,9 +2,7 @@
 % Please edit documentation in R/aws_login.R
 \name{aws_login}
 \alias{aws_login}
-\title{Utility Function to login to DataBrew AWS.
-If user is in an interactive session, generate all the required credentials to run SSO.
-If user is running in Terminal / bash / workflow / VM prompt to export temporary credentials}
+\title{Utility Function to login to DataBrew AWS.}
 \usage{
 aws_login(pipeline_stage = "production")
 }
@@ -15,7 +13,6 @@ aws_login(pipeline_stage = "production")
 metadata of AWS STS authentication (Account, Role)
 }
 \description{
-Utility Function to login to DataBrew AWS.
 If user is in an interactive session, generate all the required credentials to run SSO.
 If user is running in Terminal / bash / workflow / VM prompt to export temporary credentials
 }
