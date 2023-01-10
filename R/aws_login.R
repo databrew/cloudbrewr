@@ -41,24 +41,6 @@ aws_configure <- function(env) {
   })
 }
 
-#' Function to check AWS environment variables
-#' @description To send user message on completion of AWS Environment Variables
-check_aws_environment_variables <- function(){
-  message('Checking exported environment variables')
-  portal_url <- 'https://databrewllc.awsapps.com/start#/'
-  if(Sys.getenv("AWS_ACCESS_KEY_ID") == "" |
-     is.null(Sys.getenv("AWS_ACCESS_KEY_ID"))){
-    stop(glue::glue('[CLOUDBREWR_LOGS]: Please export Access Keys from {portal_url}'))
-  } else if (Sys.getenv("AWS_SECRET_ACCESS_KEY") == "" |
-             is.null(Sys.getenv("AWS_SECRET_ACCESS_KEY"))){
-    stop(glue::glue('[CLOUDBREWR_LOGS]: Please export Secret Access Keys from {portal_url}'))
-  } else if (Sys.getenv("AWS_SESSION_TOKEN") == "" |
-             is.null(Sys.getenv("AWS_SESSION_TOKEN"))){
-    stop(glue::glue('[CLOUDBREWR_LOGS]: Please export Session Token from {portal_url}'))
-  } else{
-    message('[CLOUDBREWR_LOGS]: Authenticating using AWS Environment Variable')
-  }
-}
 
 #' Check aws access via STS
 #' @return metadata of STS caller identity
@@ -78,7 +60,6 @@ check_aws_access <-  function(){
   })
 }
 
-
 #' Utility Function to login to DataBrew AWS.
 #' @description
 #' If user is in an interactive session, generate all the required credentials to run SSO.
@@ -95,12 +76,8 @@ aws_login <- function(pipeline_stage = 'production') {
     # configure sso in aws config
     aws_configure <- aws_configure(env = aws_env)
     aws_sso_authenticate(profile_name = aws_env$profile_name)
-
-  # else run with exported environment variables
-  }else{
-    # check aws environment variables availability
-    check_aws_environment_variables()
   }
+
   # check if you have access, return role, account metadata if succeed
   Sys.setenv(PIPELINE_STAGE = pipeline_stage)
   Sys.setenv(AWS_PROFILE  = aws_env$profile_name)
