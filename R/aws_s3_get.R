@@ -163,8 +163,6 @@ aws_s3_bulk_get <- function(bucket,
       dplyr::mutate(bucket = bucket) %>%
       dplyr::select(bucket, key = Key, etag = ETag)
 
-    print(objs)
-
       # download using aws s3 get
       message('[CLOUDBREWR_LOGS]: Fetching Objects in S3..')
       output_file <- objs %>%
