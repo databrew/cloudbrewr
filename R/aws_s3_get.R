@@ -156,11 +156,12 @@ aws_s3_bulk_get <- function(bucket,
 
     # list objects in s3
     objs <- s3obj$list_objects_v2(Bucket = bucket, ...) %>%
-      .$Contents %>%
-      purrr::map_dfr(~.x) %>%
+      .$Contents  %>%
+      purrr::map_dfr(function(row){
+        tibble::tibble(Key = row$Key,ETag = row$ETag)}) %>%
       dplyr::distinct() %>%
       dplyr::mutate(bucket = bucket) %>%
-      dplyr::select(bucket, key = Key)
+      dplyr::select(bucket, key = Key, etag = ETag)
 
     print(objs)
 
