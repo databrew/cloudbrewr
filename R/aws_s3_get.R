@@ -163,14 +163,14 @@ aws_s3_bulk_get <- function(bucket,
       dplyr::select(bucket, key = Key)
 
       # download using aws s3 get
-      output_file <- objs %>% purrr::pmap(
+      message('[CLOUDBREWR_LOGS]: Fetching Objects..')
+      output_file <- objs %>%
+        purrr::pmap(
         ~aws_s3_get_object(
           bucket = ..1,
           key = ..2,
           namespace_bucket = FALSE,
-          output_dir = output_dir
-        )
-      ) %>%
+          output_dir = output_dir)) %>%
         purrr::map_dfr(~.x) %>%
         dplyr::mutate(file_path = fs::path_abs(file_path)) %>%
         dplyr::rename(key = object_key)
@@ -186,7 +186,7 @@ aws_s3_bulk_get <- function(bucket,
               namespace_bucket = FALSE))
 
         output_file <- output_file %>%
-          dplyr::inner_join(metadata, by=c('key', 'bucket'))
+          dplyr::left_join(metadata, by=c('key', 'bucket'))
       }
       return(output_file)
   }, error = function(e){

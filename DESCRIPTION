@@ -20,7 +20,8 @@ Imports:
   tools,
   magrittr,
   rlang,
-  tibble
+  tibble,
+  fs
 Suggests: 
     knitr,
     rmarkdown
