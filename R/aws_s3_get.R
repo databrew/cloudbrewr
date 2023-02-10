@@ -162,8 +162,10 @@ aws_s3_bulk_get <- function(bucket,
       dplyr::mutate(bucket = bucket) %>%
       dplyr::select(bucket, key = Key)
 
+    print(objs)
+
       # download using aws s3 get
-      message('[CLOUDBREWR_LOGS]: Fetching Objects..')
+      message('[CLOUDBREWR_LOGS]: Fetching Objects in S3..')
       output_file <- objs %>%
         purrr::pmap(
         ~aws_s3_get_object(
@@ -177,7 +179,7 @@ aws_s3_bulk_get <- function(bucket,
 
       # (optional build metadata to get file mapping after downloads)
       if(build_metadata){
-        message('[CLOUDBREWR_LOGS]: Building files Metadata..')
+        message('[CLOUDBREWR_LOGS]: Building S3 files Metadata..')
         metadata <- objs %>%
           purrr::pmap_dfr(
             ~aws_s3_get_header(
@@ -189,8 +191,8 @@ aws_s3_bulk_get <- function(bucket,
           dplyr::left_join(metadata, by=c('key', 'bucket'))
       }
       return(output_file)
-  }, error = function(e){
-    stop(e$message)
+  }, error = function(err){
+    stop(err$message)
   })
 }
 
