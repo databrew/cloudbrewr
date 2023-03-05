@@ -48,12 +48,6 @@ check_aws_access <-  function(){
   tryCatch({
     sts <- paws::sts()
     identity <- sts$get_caller_identity()
-    msg_content <- glue::glue(
-      '[CLOUDBREWR_LOGS]: Welcome to AWS @DataBrew!',
-      '\n',
-      'You are logged in to {profile_name}',
-      profile_name = Sys.getenv('AWS_PROFILE'))
-    message(msg_content)
     return(identity)
   }, error = function(e){
     stop(e$message)
@@ -67,23 +61,64 @@ check_aws_access <-  function(){
 #' @param pipeline_stage (optional) choose production/develop stage
 #' @return metadata of AWS STS authentication (Account, Role)
 #' @export
-aws_login <- function(pipeline_stage = 'production') {
+aws_login <- function(pipeline_stage = 'production',
+                      region = NULL,
+                      access_key = NULL,
+                      secret_access_key = NULL,
+                      session_token = NULL) {
+
+
+
   # get prod/dev account
+  Sys.setenv(PIPELINE_STAGE = pipeline_stage)
   aws_env <- call_cloudbrewr_stage_env_variables(pipeline_stage = pipeline_stage)
 
-  # run SSO if you are running interactive RStudio
-  if(interactive()){
-    # configure sso in aws config
-    aws_configure <- aws_configure(env = aws_env)
-    aws_sso_authenticate(profile_name = aws_env$profile_name)
+  # skip login if aws account is desired
+  is_login <- FALSE
+  creds <- tryCatch({
+    check_aws_access()
+  }, error = function(e){
+    message('not logged in proceed')
+  })
+
+  if(!is.null(creds)){
+    if(creds$Account == aws_env$account_id){
+      is_login = TRUE
+    }
   }
 
-  # check if you have access, return role, account metadata if succeed
-  Sys.setenv(PIPELINE_STAGE = pipeline_stage)
-  Sys.setenv(AWS_PROFILE  = aws_env$profile_name)
+  if(!is_login){
+    # run SSO if you are running interactive RStudio, this option will be bypassed
+    # if you are running it as an RScript/EC2/Cron/Docker (use env variable export or IAM role for best practice)
+    if(interactive()){
+      # login via given access keys from SSO portal
+      if(!is.null(access_key)
+         & !is.null(secret_access_key)
+         & !is.null(session_token)
+         & !is.null(region)){
+        Sys.setenv(
+          AWS_ACCESS_KEY_ID = access_key,
+          AWS_SECRET_ACCESS_KEY = secret_access_key,
+          AWS_SESSION_TOKEN = session_token,
+          AWS_REGION = region
+        )
+      }else{
+        # do SSO if access key is not given
+        # configure sso in aws config
+        aws_configure <- aws_configure(env = aws_env)
+        Sys.setenv(AWS_PROFILE  = aws_env$profile_name)
+        aws_sso_authenticate(profile_name = aws_env$profile_name)
+      }
+    }
 
-  # check access
-  check_aws_access()
+    # feedback to user when logged in
+    msg_content <- glue::glue(
+      '[CLOUDBREWR_LOGS]: Welcome to AWS @DataBrew!',
+      '\n',
+      'You are logged in to {profile_name}',
+      profile_name = aws_env$profile_name)
+    message(msg_content)
+  }
 }
 
 
