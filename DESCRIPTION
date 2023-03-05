@@ -21,7 +21,9 @@ Imports:
   magrittr,
   rlang,
   tibble,
-  fs
+  fs,
+  cachem,
+  stringr
 Suggests: 
     knitr,
     rmarkdown

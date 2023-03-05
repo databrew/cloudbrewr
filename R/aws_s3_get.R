@@ -67,6 +67,8 @@ aws_s3_get_object_version_history <- function(bucket,
 #' @param key s3 object key
 #' @param output_dir output directory, will create tempfile if set to null
 #' @param namespace_bucket boolean to create namespace bucket, set to FALSE to override bucket namespace
+#' @param check_cache default to false, set to true to check if data is cached somewhere for reducing multiple download
+#' @param write_cache default to false, set to true if want to write to cache
 #' @param ... additional parameter from S3 get object
 #'
 #' @importFrom magrittr %>%
@@ -75,14 +77,45 @@ aws_s3_get_object_version_history <- function(bucket,
 #' @export
 aws_s3_get_object <- function(bucket,
                               key,
-                              output_dir = NULL,
+                              output_dir = '~/.cloudbrewr_cache',
                               namespace_bucket = TRUE,
+                              check_cache = FALSE,
+                              write_cache = FALSE,
                               ...){
   tryCatch({
     # authenticate to s3
     s3obj <- paws::s3()
+    d <- pull_cache(cache = output_dir)
+
+    # namespace bucket
     if(namespace_bucket){
       bucket <- aws_namespace(bucket)
+    }
+
+    # create dir if not exist
+    if(!dir.exists(output_dir)){
+      dir.create(output_dir)
+    }
+
+    is_cached <- FALSE
+    # check if use cache
+    if(check_cache){
+      header <- s3obj$head_object(Bucket = bucket, Key = key, ...)
+      etag <- stringr::str_replace_all(header$ETag, "[[:punct:]]", "")
+
+      # if cache is already available
+      if(check_cloudbrewr_cache(etag, cache = output_dir)){
+        output <- list(
+          bucket = bucket,
+          object_key = key,
+          content_length = header$ContentLength,
+          content_type = header$ContentType,
+          version_id = header$VersionId,
+          last_modified = header$LastModified,
+          etag = etag,
+          file_path = d$get(etag))
+        return(output)
+      }
     }
 
     # get metadata
@@ -97,14 +130,14 @@ aws_s3_get_object <- function(bucket,
       content_length = metadata$ContentLength,
       version_id = metadata$VersionId,
       content_type = metadata$ContentType,
-      etag = metadata$ETag
+      etag = stringr::str_replace_all(metadata$ETag, "[[:punct:]]", "")
     )
 
-    # save to tempfile if output dir is not defined
+    # if output dir is null save to cache
     if(is.null(output_dir)){
-      file_path <- tempfile(
-        basename(dirname(key)),
-        fileext = paste0(".", tools::file_ext(key))
+      file_path <- file.path(
+        "~/.cloudbrewr_cache",
+        basename(key)
       )
     # save to desired directory
     }else{
@@ -120,9 +153,13 @@ aws_s3_get_object <- function(bucket,
       Key = key,
       Filename = file_path,
       ...)
-
     # add filepath
     output$file_path <- file_path
+
+    if(write_cache){
+      d <- pull_cache(cache = output_dir)
+      d$set(output$etag, output$file_path)
+    }
 
   }, error = function(e){
     stop(e$message)
@@ -144,50 +181,69 @@ aws_s3_get_object <- function(bucket,
 #' @export
 aws_s3_bulk_get <- function(bucket,
                             namespace_bucket = TRUE,
-                            build_metadata = TRUE,
-                            output_dir = NULL,
+                            output_dir = '~/.cloudbrewr_cache',
+                            check_cache = FALSE,
+                            write_cache = FALSE,
                             ...){
   tryCatch({
     # authenticate to s3
     s3obj <- paws::s3()
+
+    # name space bucket
     if(namespace_bucket){
       bucket <- aws_namespace(bucket)
+    }
+
+    # create dir if not exist
+    if(!dir.exists(output_dir)){
+      dir.create(output_dir)
     }
 
     # list objects in s3
     objs <- s3obj$list_objects_v2(Bucket = bucket, ...) %>%
       .$Contents  %>%
       purrr::map_dfr(function(row){
-        tibble::tibble(Key = row$Key,ETag = row$ETag)}) %>%
+        tibble::tibble(Key = row$Key,
+                       ETag = row$ETag)}) %>%
       dplyr::distinct() %>%
-      dplyr::mutate(bucket = bucket) %>%
-      dplyr::select(bucket, key = Key, etag = ETag)
+      dplyr::mutate(bucket = bucket,
+                    etag = stringr::str_replace_all(ETag, "[[:punct:]]", "")) %>%
+      dplyr::select(bucket,
+                    key = Key,
+                    etag)
+      # check cache
+      if(check_cache){
+        message('[CLOUDBREWR_LOGS]: Retrieving Cached Output')
+        d <- pull_cache(cache = output_dir)
+        objs <- objs %>%
+          dplyr::filter(!etag %in% d$keys())
+      }
 
-      # download using aws s3 get
-      message('[CLOUDBREWR_LOGS]: Fetching Objects in S3..')
-      output_file <- objs %>%
-        purrr::pmap(
-        ~aws_s3_get_object(
-          bucket = ..1,
-          key = ..2,
-          namespace_bucket = FALSE,
-          output_dir = output_dir)) %>%
-        purrr::map_dfr(~.x) %>%
-        dplyr::mutate(file_path = fs::path_abs(file_path)) %>%
-        dplyr::rename(key = object_key)
 
-      # (optional build metadata to get file mapping after downloads)
-      if(build_metadata){
-        message('[CLOUDBREWR_LOGS]: Building S3 files Metadata..')
-        metadata <- objs %>%
-          purrr::pmap_dfr(
-            ~aws_s3_get_header(
-              bucket = bucket,
+      msg_logs <- glue::glue('[CLOUDBREWR_LOGS]: Downloading {n_obj} Objects in S3..',
+                             n_obj = nrow(objs))
+      message(msg_logs)
+
+      print(objs)
+
+      if(nrow(objs) > 0){
+        # download using aws s3 get
+        output_file <- objs %>%
+          dplyr::mutate_all(as.character) %>%
+          purrr::pmap(
+            ~aws_s3_get_object(
+              bucket = ..1,
               key = ..2,
-              namespace_bucket = FALSE))
-
-        output_file <- output_file %>%
-          dplyr::left_join(metadata, by=c('key', 'bucket'))
+              namespace_bucket = FALSE,
+              output_dir = output_dir,
+              write_cache = write_cache,
+              check_cache = check_cache)) %>%
+          purrr::map_dfr(~.x) %>%
+          dplyr::mutate(file_path = fs::path_abs(file_path)) %>%
+          dplyr::rename(key = object_key) %>%
+          dplyr::select(file_path, etag, key, bucket)
+      }else{
+        output_file <- NULL
       }
       return(output_file)
   }, error = function(err){
@@ -225,6 +281,5 @@ aws_s3_get_header <- function(bucket,
   }, error = function(e){
     stop(e$message)
   })
-
 
 }
