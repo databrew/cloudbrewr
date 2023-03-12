@@ -2,7 +2,7 @@
 #' @description Instantiate SSO connection using internet browser
 #' @param profile_name the profile name set to prod/dev
 #' @importFrom glue glue
-aws_sso_authenticate <- function(profile_name){
+aws_sso_authenticate <- function(profile_name, account_id){
   tryCatch({
     aws_args <- paste0(glue::glue("sso login --profile {profile_name}"))
     system2(
@@ -17,21 +17,24 @@ aws_sso_authenticate <- function(profile_name){
 #' Function to create SSO configuration
 #' @description Create ~/.aws/config with requirements to SSO to DataBrew AWS Accounts
 #' @param env environment variables
-aws_configure <- function(env) {
+aws_configure <- function(profile_name,
+                          role_name,
+                          account_region = 'us-east-1',
+                          account_id = '354598940118') {
   config_defaults <-  list(
     sso_start_url = 'https://databrewllc.awsapps.com/start',
     sso_region = 'us-east-1',
-    sso_role_name = 'cloudbrewr-aws-role',
-    region = 'us-east-1',
+    sso_role_name = role_name,
+    region = account_region,
     output = 'json')
 
   tryCatch({
     # create dev sso account in aws config
-    config_defaults$sso_account_id <- env$account_id
+    config_defaults$sso_account_id <- account_id
     purrr::map(names(config_defaults), function(key){
       aws_arg_input <- glue::glue(
         'configure set {key} {config_defaults[[key]]} ',
-        '--profile {env$profile_name}')
+        '--profile {profile_name}')
       # create new profile
       system2(command = "aws", args = c(aws_arg_input))
     })
@@ -58,31 +61,45 @@ check_aws_access <-  function(){
 #' @description
 #' If user is in an interactive session, generate all the required credentials to run SSO.
 #' If user is running in Terminal / bash / workflow / VM prompt to export temporary credentials
-#' @param pipeline_stage (optional) choose production/develop stage
+#' @param role_name set role name based on SSO portal, this will be different based on different users but default values will be set to cloudbrewr-aws-role
+#' @param profile_name set profile name to save your SSO configuration locally, this will be different based on different users
+#' @param account_region default to us-east-1
+#' @param access_key retrieve from portal for access key access
+#' @param secret_access_key retrieve from portal for secret access key
+#' @param session_token retrieve fro portal
+#' @param pipeline_stage (DataBrew internal use for CI/CD) choose production/develop stage
 #' @return metadata of AWS STS authentication (Account, Role)
 #' @export
-aws_login <- function(pipeline_stage = 'production',
-                      region = NULL,
+aws_login <- function(role_name = 'cloudbrewr-aws-role',
+                      profile_name = 'dbrew-cloudbrewr-role',
                       access_key = NULL,
                       secret_access_key = NULL,
-                      session_token = NULL) {
+                      session_token = NULL,
+                      account_region = 'us-east-1',
+                      pipeline_stage = 'production') {
 
-
-
-  # get prod/dev account
+  # instantiate pipeline stage
   Sys.setenv(PIPELINE_STAGE = pipeline_stage)
-  aws_env <- call_cloudbrewr_stage_env_variables(pipeline_stage = pipeline_stage)
+  if(pipeline_stage == 'develop') {
+    aws_env <- call_cloudbrewr_stage_env_variables(pipeline_stage = Sys.getenv('PIPELINE_STAGE'))
+    account_id <- aws_env$account_id
+    profile_name <- aws_env$profile_name
+    role_name <- 'AdministratorAccess'
+  }else{
+    aws_env <- call_cloudbrewr_stage_env_variables(pipeline_stage = Sys.getenv('PIPELINE_STAGE'))
+    account_id <- '354598940118'
+  }
 
   # skip login if aws account is desired
   is_login <- FALSE
   creds <- tryCatch({
     check_aws_access()
   }, error = function(e){
-    message('not logged in proceed')
+    message('[CLOUDBREWR_LOGS]: User not logged in: Attempting Login...')
   })
 
   if(!is.null(creds)){
-    if(creds$Account == aws_env$account_id){
+    if(creds$Account == account_id){
       is_login = TRUE
     }
   }
@@ -95,30 +112,25 @@ aws_login <- function(pipeline_stage = 'production',
       if(!is.null(access_key)
          & !is.null(secret_access_key)
          & !is.null(session_token)
-         & !is.null(region)){
+         & !is.null(account_region)){
+        message('[CLOUDBREWR_LOGS]: Attempting Access Key Login')
         Sys.setenv(
           AWS_ACCESS_KEY_ID = access_key,
           AWS_SECRET_ACCESS_KEY = secret_access_key,
           AWS_SESSION_TOKEN = session_token,
-          AWS_REGION = region
+          AWS_REGION = account_region
         )
       }else{
         # do SSO if access key is not given
         # configure sso in aws config
-        aws_configure <- aws_configure(env = aws_env)
-        Sys.setenv(AWS_PROFILE  = aws_env$profile_name)
-        aws_sso_authenticate(profile_name = aws_env$profile_name)
+        message('[CLOUDBREWR_LOGS]: Attempting SSO Login')
+        aws_configure <- aws_configure(profile_name = profile_name,
+                                       role_name =  role_name,
+                                       account_id = account_id)
+        Sys.setenv(AWS_PROFILE = profile_name)
+        aws_sso_authenticate(profile_name = profile_name,
+                             account_id = account_id)
       }
     }
-
-    # feedback to user when logged in
-    msg_content <- glue::glue(
-      '[CLOUDBREWR_LOGS]: Welcome to AWS @DataBrew!',
-      '\n',
-      'You are logged in to {profile_name}',
-      profile_name = aws_env$profile_name)
-    message(msg_content)
   }
 }
-
-

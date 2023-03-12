@@ -21,8 +21,12 @@ library(dplyr)
 ```
 
 ### Log in to AWS @DataBrew
+
+Let's take
 ```{r eval = FALSE}
-aws_login()
+aws_login(
+    role_name = 'cloudbrewr-aws-role',
+    profile_name = 'dbrew-cloudbrewr-aws-role')
 ```
 
 After running login, depending in your session there will be two login types. 
@@ -44,6 +48,7 @@ object <- aws_s3_get_object(
 ```
 
 Running the object getter will give user with the metadata of the object, starting from item size `content_length`, `version_id`, and other s3-related information. To read .csv file locally run:
+
 ```{r}
 data <- fread(object$file_path) %>% 
   dplyr::select(SubmissionDate) %>%
@@ -51,7 +56,16 @@ data <- fread(object$file_path) %>%
 data
 ```
 
-### Storing an Object to S3 bucket
+By default, data is save to `~/.cloudbrew_cache`, to change to existing directory use `output_dir` parameter:
+
+```{r}
+object <- aws_s3_get_object(
+  bucket = 'databrew.org', 
+  key = 'bohemiatesting-ke/raw-form/reconhh/reconhh.csv',
+  output_dir = 'data')
+```
+
+### Storing an Object to S3 bucket (@Internal Use)
 
 Say you want to save the output again to S3, this is the procedure to store the data:
 ```{r}
