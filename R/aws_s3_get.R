@@ -100,11 +100,14 @@ aws_s3_get_object <- function(bucket,
     is_cached <- FALSE
     # check if use cache
     if(check_cache){
+      msg <- glue::glue('[CLOUDBREWR_LOGS]: Checking cache for {key}')
+      message(msg)
       header <- s3obj$head_object(Bucket = bucket, Key = key, ...)
       etag <- stringr::str_replace_all(header$ETag, "[[:punct:]]", "")
 
       # if cache is already available
       if(check_cloudbrewr_cache(etag, cache = output_dir)){
+        message('[CLOUDBREWR_LOGS]: Cache hit, skipping download...')
         output <- list(
           bucket = bucket,
           object_key = key,
@@ -116,6 +119,8 @@ aws_s3_get_object <- function(bucket,
           file_path = d$get(etag))
         return(output)
       }
+      msg <- glue::glue('[CLOUDBREWR_LOGS]: {key} is not found, downloading...')
+      message(msg)
     }
 
     # get metadata
@@ -223,8 +228,6 @@ aws_s3_bulk_get <- function(bucket,
       msg_logs <- glue::glue('[CLOUDBREWR_LOGS]: Downloading {n_obj} Objects in S3..',
                              n_obj = nrow(objs))
       message(msg_logs)
-
-      print(objs)
 
       if(nrow(objs) > 0){
         # download using aws s3 get
