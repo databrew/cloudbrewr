@@ -152,6 +152,7 @@ aws_s3_get_object <- function(bucket,
       )
     }
 
+    unlink(file_path)
     # download file using filepath
     s3obj$download_file(
       Bucket= bucket,
