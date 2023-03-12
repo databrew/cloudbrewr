@@ -10,6 +10,10 @@ We are currently supporting data stored in:
 - AWS S3 Storage
 - TBD
 
+## Prerequisites
+
+- AWS CLI: [Installation Link](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+
 ## Installation
 
 Installation can be done through github installation:
