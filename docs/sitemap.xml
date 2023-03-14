@@ -34,10 +34,16 @@
     <loc>/reference/aws_namespace.html</loc>
   </url>
   <url>
+    <loc>/reference/aws_s3_bulk_get.html</loc>
+  </url>
+  <url>
     <loc>/reference/aws_s3_create_bucket.html</loc>
   </url>
   <url>
     <loc>/reference/aws_s3_get_catalog.html</loc>
+  </url>
+  <url>
+    <loc>/reference/aws_s3_get_header.html</loc>
   </url>
   <url>
     <loc>/reference/aws_s3_get_object.html</loc>

@@ -8,10 +8,10 @@
 <meta name="description" content="cloudbrewr">
 <title>CloudBrewR S3 Utility Functions • cloudbrewr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="CloudBrewR S3 Utility Functions">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="CloudBrewR S3 Utility Functions">
 <meta property="og:description" content="cloudbrewr">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -102,18 +102,18 @@ bucket. It will crawl all objects inside the S3 folder</p>
 <span>  bucket <span class="op">=</span> <span class="st">'databrew.org'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Key</span>, <span class="va">LastModified</span>, <span class="va">Size</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Expected 3 pieces. Additional pieces discarded in 64 rows [15, 16, 17,</span></span>
-<span><span class="co">#&gt; 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, ...].</span></span>
-<span><span class="co">#&gt; Warning: Expected 3 pieces. Missing pieces filled with `NA` in 10 rows [9, 10,</span></span>
-<span><span class="co">#&gt; 11, 12, 81, 82, 99, 100, 101, 102].</span></span>
+<span><span class="co">#&gt; Warning: Expected 3 pieces. Additional pieces discarded in 192 rows [27, 28, 29, 30, 31,</span></span>
+<span><span class="co">#&gt; 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, ...].</span></span>
+<span><span class="co">#&gt; Warning: Expected 3 pieces. Missing pieces filled with `NA` in 22 rows [1, 2, 3, 4, 5,</span></span>
+<span><span class="co">#&gt; 6, 7, 8, 9, 10, 11, 12, 21, 22, 23, 24, 219, 220, 245, 246, ...].</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 3</span></span></span>
-<span><span class="co">#&gt;   Key                                                  LastModified         Size</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> bohemiatesting-ke/raw-form/reconaregistration/recon… 2022-11-30 <span style="color: #949494;">00:00:34</span>  <span style="text-decoration: underline;">6</span>744</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> bohemiatesting-ke/raw-form/reconaregistration/recon… 2022-11-30 <span style="color: #949494;">00:00:34</span>  <span style="text-decoration: underline;">6</span>744</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> bohemiatesting-ke/raw-form/reconbhousehold/reconbho… 2022-11-30 <span style="color: #949494;">00:00:34</span>  <span style="text-decoration: underline;">3</span>288</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> bohemiatesting-ke/raw-form/reconbhousehold/reconbho… 2022-11-30 <span style="color: #949494;">00:00:34</span>  <span style="text-decoration: underline;">3</span>288</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> bohemiatesting-ke/raw-form/reconhh/reconhh.csv       2022-11-30 <span style="color: #949494;">00:00:34</span>  <span style="text-decoration: underline;">3</span>089</span></span></code></pre></div>
+<span><span class="co">#&gt;   Key                                          LastModified             Size</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                        <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> bohemia-analyses/                            2023-02-28 <span style="color: #949494;">15:34:49</span>         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> bohemia-analyses/                            2023-02-28 <span style="color: #949494;">15:34:49</span>         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> bohemia-analyses/vaccine_analysis/           2023-02-28 <span style="color: #949494;">15:35:09</span>         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> bohemia-analyses/vaccine_analysis/           2023-02-28 <span style="color: #949494;">15:35:09</span>         0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> bohemia-analyses/vaccine_analysis/data.RData 2023-02-28 <span style="color: #949494;">15:36:01</span> 178<span style="text-decoration: underline;">452</span>095</span></span></code></pre></div>
 <p>To narrow down your catalog search:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/aws_s3_get_catalog.html">aws_s3_get_catalog</a></span><span class="op">(</span></span>
@@ -124,11 +124,11 @@ bucket. It will crawl all objects inside the S3 folder</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 3</span></span></span>
 <span><span class="co">#&gt;   Key                                                 LastModified          Size</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                               <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> kwale/clean-form/reconaregistration/reconaregistra… 2023-01-08 <span style="color: #949494;">21:03:21</span> 5.82<span style="color: #949494;">e</span>4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> kwale/clean-form/reconaregistration/reconaregistra… 2023-01-08 <span style="color: #949494;">21:03:21</span> 5.82<span style="color: #949494;">e</span>4</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> kwale/clean-form/reconaregistration/reconaregistra… 2023-03-14 <span style="color: #949494;">05:03:50</span> 1.24<span style="color: #949494;">e</span>5</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> kwale/clean-form/reconaregistration/reconaregistra… 2023-03-14 <span style="color: #949494;">05:03:50</span> 1.24<span style="color: #949494;">e</span>5</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> kwale/clean-form/reconaregistrationtraining/recona… 2022-11-30 <span style="color: #949494;">00:02:07</span> 1.27<span style="color: #949494;">e</span>4</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> kwale/clean-form/reconaregistrationtraining/recona… 2022-11-30 <span style="color: #949494;">00:02:07</span> 1.27<span style="color: #949494;">e</span>4</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> kwale/clean-form/reconbhousehold/reconbhousehold.c… 2023-01-08 <span style="color: #949494;">21:03:23</span> 4.69<span style="color: #949494;">e</span>6</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> kwale/clean-form/reconbhousehold/reconbhousehold.c… 2023-03-14 <span style="color: #949494;">05:03:56</span> 9.34<span style="color: #949494;">e</span>6</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="get-s3-object-versioning-history">Get S3 Object Versioning History<a class="anchor" aria-label="anchor" href="#get-s3-object-versioning-history"></a>
@@ -144,11 +144,11 @@ VersionId) metadata</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 5 × 4</span></span></span>
 <span><span class="co">#&gt;   Key                                           Size LastModified        Versi…¹</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> kwale/raw-form/reconaregistration/reconareg… <span style="text-decoration: underline;">65</span>764 2023-01-08 <span style="color: #949494;">21:01:54</span> GTRG_E…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> kwale/raw-form/reconaregistration/reconareg… <span style="text-decoration: underline;">65</span>764 2023-01-08 <span style="color: #949494;">14:02:10</span> DRYWA7…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> kwale/raw-form/reconaregistration/reconareg… <span style="text-decoration: underline;">65</span>764 2023-01-08 <span style="color: #949494;">13:02:10</span> KtNCyc…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> kwale/raw-form/reconaregistration/reconareg… <span style="text-decoration: underline;">65</span>764 2023-01-08 <span style="color: #949494;">12:02:38</span> 0_YjaS…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> kwale/raw-form/reconaregistration/reconareg… <span style="text-decoration: underline;">65</span>764 2023-01-08 <span style="color: #949494;">11:02:17</span> itca_Q…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> kwale/raw-form/reconaregistration/reconare… <span style="text-decoration: underline;">135</span>680 2023-03-14 <span style="color: #949494;">05:02:16</span> PBNDMz…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> kwale/raw-form/reconaregistration/reconare… <span style="text-decoration: underline;">135</span>680 2023-03-13 <span style="color: #949494;">21:02:16</span> XgBKu2…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> kwale/raw-form/reconaregistration/reconare… <span style="text-decoration: underline;">135</span>680 2023-03-13 <span style="color: #949494;">14:02:32</span> _S2EwH…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> kwale/raw-form/reconaregistration/reconare… <span style="text-decoration: underline;">135</span>680 2023-03-13 <span style="color: #949494;">13:02:17</span> ss3V4D…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> kwale/raw-form/reconaregistration/reconare… <span style="text-decoration: underline;">135</span>680 2023-03-13 <span style="color: #949494;">12:02:20</span> K8355S…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable name ¹​VersionId</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -228,7 +228,7 @@ over-extract your partitioned files.</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>

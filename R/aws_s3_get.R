@@ -63,12 +63,12 @@ aws_s3_get_object_version_history <- function(bucket,
 }
 
 #' Get Object in DataBrew S3
-#' @param bucket s3 bucket
-#' @param key s3 object key
-#' @param output_dir output directory, will create tempfile if set to null
+#' @param bucket s3 bucket name
+#' @param key s3 object key / s3 URI
+#' @param output_dir output directory from aws_s3_get parameter, this will be the destination if write_cache is set to `TRUE`
 #' @param namespace_bucket boolean to create namespace bucket, set to FALSE to override bucket namespace
-#' @param check_cache default to false, set to true to check if data is cached somewhere for reducing multiple download
-#' @param write_cache default to false, set to true if want to write to cache
+#' @param check_cache boolean, set to `TRUE` if you would like to check cache before download
+#' @param write_cache boolean, set to `TRUE` if you would like to write cache after download
 #' @param ... additional parameter from S3 get object
 #'
 #' @importFrom magrittr %>%
@@ -177,8 +177,9 @@ aws_s3_get_object <- function(bucket,
 #' Bulk Get Object in DataBrew S3
 #' @param bucket s3 bucket
 #' @param namespace_bucket boolean to create namespace bucket, set to FALSE to override bucket namespace
-#' @param build_metadata boolean to create metadata of bulk object retrieval from S3
-#' @param output_dir output directory from aws_s3_get parameter
+#' @param output_dir output directory from aws_s3_get parameter, this will be the destination if write_cache is set to `TRUE`
+#' @param check_cache boolean, set to `TRUE` if you would like to check cache before download
+#' @param write_cache boolean, set to `TRUE` if you would like to write cache after download
 #' @param ... additional parameter from S3 get object
 #'
 #' @importFrom magrittr %>%
