@@ -25,8 +25,8 @@ devtools::install_github('databrew/cloudbrewr')
 ```r
 library(cloudbrewr)
 cloudbrewr::aws_login(
-  role_name = < available role in sso portal >,
-  profile_name = < any name you desire as your profile that will be set in configuration >
+  role_name = 'SSO_ROLE_NAME_FROM_WEB_PORTAL',
+  profile_name = 'AWS_PROFILE_NAME_OF_CHOICE'
 )
 ```
 
