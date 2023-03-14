@@ -25,6 +25,19 @@ library(dplyr)
 
 This section covers some utility function is used that can help your daily S3 usage. Here are some utility functions in CloudBrewR
 
+### Bulk Get S3 Objects
+This function is used for doing bulk data retrieval
+```{r}
+object <- cloudbrewr::aws_s3_bulk_get(
+    bucket = 'bohemia-datalake',
+    Prefix = 'bohemia-minicensus'
+)
+
+object
+```
+
+After doing bulk retrieval operation, you will be able to store the output as an object and go through the file mapping in the `~/.cloudbrewr_cache` or existing directory if you set a custom `output_dir`
+
 ### Get S3 Data Catalog
 This function is used to get the catalog of files under databrew.org bucket. It will crawl all objects inside the S3 folder
 ```{r}

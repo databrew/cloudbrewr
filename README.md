@@ -59,8 +59,8 @@ read.csv(object$file_path)
 
 ## Vignettes
 
-Check out our team Vignettes here in [Github Pages](http://www.databrew.cc/cloudbrewr/)
+To read more about other features, check out our team Vignettes here in [Github Pages](http://www.databrew.cc/cloudbrewr/)
 
-## How to Contribute
+## Contribute
 
-Coming soon!!
+In-Dev by atediarjo@gmail.com
