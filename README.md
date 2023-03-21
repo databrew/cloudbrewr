@@ -22,6 +22,18 @@ devtools::install_github('databrew/cloudbrewr')
 
 ## Log in to AWS
 
+### Non-Interactive Session Login
+When running your script through non-interactive session (terminal/bash/virtual-machines) please manually export the access keys from the `Command line or programmatic access` in the [SSO Portal](https://databrewllc.awsapps.com/start/#/)
+
+```bash
+export AWS_ACCESS_KEY_ID='SOME_ACCESS_KEY'
+export AWS_SECRET_ACCESS_KEY='SOME_SECRET_ACCESS_KEY'
+export AWS_SESSION_TOKEN='SOME_SESSION_TOKEN'
+```
+
+If you are running in DataBrew AWS Compute Resources (EC2, Lambda, ECS) **Please use IAM Role-Based Access**
+
+### Interactive Session Login
 ```r
 library(cloudbrewr)
 cloudbrewr::aws_login(
