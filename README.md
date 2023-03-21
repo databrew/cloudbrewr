@@ -31,6 +31,11 @@ export AWS_SECRET_ACCESS_KEY='SOME_SECRET_ACCESS_KEY'
 export AWS_SESSION_TOKEN='SOME_SESSION_TOKEN'
 ```
 
+```r
+library(cloudbrewr)
+cloudbrewr::aws_login() # no need to define role name if using manual export
+```
+
 If you are running in DataBrew AWS Compute Resources (EC2, Lambda, ECS) **Please use IAM Role-Based Access**
 
 ### Interactive Session Login
