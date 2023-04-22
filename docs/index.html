@@ -77,12 +77,35 @@
 </h2>
 <p>Installation can be done through Github installation:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'databrew/cloudbrewr'</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'databrew/cloudbrewr'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="log-in-to-aws">Log in to AWS<a class="anchor" aria-label="anchor" href="#log-in-to-aws"></a>
+<h2 id="aws-authentication">AWS Authentication<a class="anchor" aria-label="anchor" href="#aws-authentication"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>There are two procedures in AWS Session Authentication</p>
+<ul>
+<li>Interactive: RStudio, RStudio Shell</li>
+<li>Non-Interactive: Bash, Terminal (Not the one in RStudio)</li>
+</ul>
+<div class="section level3">
+<h3 id="non-interactive-session-login">Non-Interactive Session Login<a class="anchor" aria-label="anchor" href="#non-interactive-session-login"></a>
+</h3>
+<p>When running your script through non-interactive session (terminal/bash/virtual-machines) please manually export the access keys from the <code>Command line or programmatic access</code> in the <a href="https://databrewllc.awsapps.com/start/#/" class="external-link">SSO Portal</a></p>
+<p>In bash:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">AWS_ACCESS_KEY_ID</span><span class="op">=</span><span class="st">'SOME_ACCESS_KEY'</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">AWS_SECRET_ACCESS_KEY</span><span class="op">=</span><span class="st">'SOME_SECRET_ACCESS_KEY'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">AWS_SESSION_TOKEN</span><span class="op">=</span><span class="st">'SOME_SESSION_TOKEN'</span></span></code></pre></div>
+<p>Your RScript:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cloudbrewr</span><span class="op">)</span></span>
+<span><span class="fu">cloudbrewr</span><span class="fu">::</span><span class="fu"><a href="reference/aws_login.html">aws_login</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># no need to define role name if using manual export</span></span></code></pre></div>
+<p>If you are running in DataBrew AWS Compute Resources (EC2, Lambda, ECS) <strong>Please use IAM Role-Based Access</strong></p>
+</div>
+<div class="section level3">
+<h3 id="interactive-session-login">Interactive Session Login<a class="anchor" aria-label="anchor" href="#interactive-session-login"></a>
+</h3>
+<p>Run this in RStudio:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cloudbrewr</span><span class="op">)</span></span>
 <span><span class="fu">cloudbrewr</span><span class="fu">::</span><span class="fu"><a href="reference/aws_login.html">aws_login</a></span><span class="op">(</span></span>
 <span>  role_name <span class="op">=</span> <span class="st">'SSO_ROLE_NAME_FROM_WEB_PORTAL'</span>,</span>
@@ -97,11 +120,12 @@
 <li><p>This command will create a profile in <code>~/.aws/config</code>, where AWS will use it as a reference for future authentication</p></li>
 </ul>
 </div>
+</div>
 <div class="section level2">
 <h2 id="fetching-your-first-object">Fetching your first object<a class="anchor" aria-label="anchor" href="#fetching-your-first-object"></a>
 </h2>
 <p>An example of how you can get an S3 object and read it as a <code>.csv</code> file</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">object</span> <span class="op">&lt;-</span> <span class="fu">cloudbrewr</span><span class="fu">::</span><span class="fu"><a href="reference/aws_s3_get_object.html">aws_s3_get_object</a></span><span class="op">(</span></span>
 <span>    bucket <span class="op">=</span> <span class="st">'bohemia-datalake'</span>,</span>
 <span>    key <span class="op">=</span> <span class="st">'bohemia-minicensus/clean_minicensus_main.csv'</span>,</span>
@@ -114,6 +138,25 @@
 <h2 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
 </h2>
 <p>To read more about other features, check out our team Vignettes here in <a href="http://www.databrew.cc/cloudbrewr/" class="external-link">Github Pages</a></p>
+</div>
+<div class="section level2">
+<h2 id="troubleshooting--faqs">Troubleshooting &amp; FAQs<a class="anchor" aria-label="anchor" href="#troubleshooting--faqs"></a>
+</h2>
+<p>Not able to authenticate?</p>
+<ol style="list-style-type: decimal">
+<li><p>Check ~/.aws/config and see whether you do not have the same profile name with different AWS Account set up, as this package will append to your config file</p></li>
+<li><p>Check your AWS access by using the STS service</p></li>
+</ol>
+<p>To run STS in R:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paws-r/paws" class="external-link">paws</a></span><span class="op">)</span></span>
+<span><span class="va">sts</span> <span class="op">&lt;-</span> <span class="fu">paws</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/paws/man/sts.html" class="external-link">sts</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">sts</span><span class="op">$</span><span class="fu">get_caller_identity</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Clarify that your account is DataBrew AWS Account <code>354598940118</code></p>
+<ol start="3" style="list-style-type: decimal">
+<li>For further issues, post to <a href="https://github.com/databrew/cloudbrewr/issues" class="external-link">Github Issues</a>
+</li>
+</ol>
 </div>
 <div class="section level2">
 <h2 id="contribute">Contribute<a class="anchor" aria-label="anchor" href="#contribute"></a>

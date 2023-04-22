@@ -37,6 +37,9 @@
     <loc>/reference/aws_s3_bulk_get.html</loc>
   </url>
   <url>
+    <loc>/reference/aws_s3_bulk_store.html</loc>
+  </url>
+  <url>
     <loc>/reference/aws_s3_create_bucket.html</loc>
   </url>
   <url>
@@ -76,6 +79,12 @@
     <loc>/reference/check_aws_environment_variables.html</loc>
   </url>
   <url>
+    <loc>/reference/check_cloudbrewr_cache.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pull_cache.html</loc>
   </url>
 </urlset>

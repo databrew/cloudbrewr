@@ -50,25 +50,41 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aws_s3_get_object</span><span class="op">(</span><span class="va">bucket</span>, <span class="va">key</span>, output_dir <span class="op">=</span> <span class="cn">NULL</span>, namespace_bucket <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aws_s3_get_object</span><span class="op">(</span></span>
+<span>  <span class="va">bucket</span>,</span>
+<span>  <span class="va">key</span>,</span>
+<span>  output_dir <span class="op">=</span> <span class="st">"~/.cloudbrewr_cache"</span>,</span>
+<span>  namespace_bucket <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  check_cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  write_cache <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>bucket</dt>
-<dd><p>s3 bucket</p></dd>
+<dd><p>s3 bucket name</p></dd>
 
 
 <dt>key</dt>
-<dd><p>s3 object key</p></dd>
+<dd><p>s3 object key / s3 URI</p></dd>
 
 
 <dt>output_dir</dt>
-<dd><p>output directory, will create tempfile if set to null</p></dd>
+<dd><p>output directory from aws_s3_get parameter, this will be the destination if write_cache is set to <code>TRUE</code></p></dd>
 
 
 <dt>namespace_bucket</dt>
 <dd><p>boolean to create namespace bucket, set to FALSE to override bucket namespace</p></dd>
+
+
+<dt>check_cache</dt>
+<dd><p>boolean, set to <code>TRUE</code> if you would like to check cache before download</p></dd>
+
+
+<dt>write_cache</dt>
+<dd><p>boolean, set to <code>TRUE</code> if you would like to write cache after download</p></dd>
 
 
 <dt>...</dt>

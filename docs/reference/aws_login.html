@@ -53,13 +53,45 @@ If user is running in Terminal / bash / workflow / VM prompt to export temporary
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aws_login</span><span class="op">(</span>pipeline_stage <span class="op">=</span> <span class="st">"production"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">aws_login</span><span class="op">(</span></span>
+<span>  role_name <span class="op">=</span> <span class="st">"cloudbrewr-aws-role"</span>,</span>
+<span>  profile_name <span class="op">=</span> <span class="st">"dbrew-cloudbrewr-role"</span>,</span>
+<span>  access_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  secret_access_key <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  session_token <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  account_region <span class="op">=</span> <span class="st">"us-east-1"</span>,</span>
+<span>  pipeline_stage <span class="op">=</span> <span class="st">"production"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>pipeline_stage</dt>
-<dd><p>(optional) choose production/develop stage</p></dd>
+    <dl><dt>role_name</dt>
+<dd><p>set role name based on SSO portal, this will be different based on different users but default values will be set to cloudbrewr-aws-role</p></dd>
+
+
+<dt>profile_name</dt>
+<dd><p>set profile name to save your SSO configuration locally, this will be different based on different users</p></dd>
+
+
+<dt>access_key</dt>
+<dd><p>retrieve from portal for access key access</p></dd>
+
+
+<dt>secret_access_key</dt>
+<dd><p>retrieve from portal for secret access key</p></dd>
+
+
+<dt>session_token</dt>
+<dd><p>retrieve fro portal</p></dd>
+
+
+<dt>account_region</dt>
+<dd><p>default to us-east-1</p></dd>
+
+
+<dt>pipeline_stage</dt>
+<dd><p>(DataBrew internal use for CI/CD) choose production/develop stage</p></dd>
 
 </dl></div>
     <div class="section level2">

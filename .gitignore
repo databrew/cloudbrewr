@@ -41,3 +41,4 @@ vignettes/*.pdf
 # ignore renv lock
 renv.lock
 *renv/
+vignettes/data/
