@@ -7,9 +7,9 @@
 aws_s3_get_table(bucket, key, namespace_bucket = TRUE, ...)
 }
 \arguments{
-\item{bucket}{s3 bucket}
+\item{bucket}{s3 bucket name}
 
-\item{key}{s3 object key}
+\item{key}{s3 object key / s3 URI}
 
 \item{namespace_bucket}{boolean to create namespace bucket, set to FALSE to override bucket namespace}
 

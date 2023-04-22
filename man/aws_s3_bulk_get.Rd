@@ -6,20 +6,20 @@
 \usage{
 aws_s3_bulk_get(
   bucket,
+  prefix = NULL,
   namespace_bucket = TRUE,
-  build_metadata = TRUE,
-  output_dir = NULL,
+  output_dir = "~/.cloudbrewr_cache",
   ...
 )
 }
 \arguments{
 \item{bucket}{s3 bucket}
 
+\item{prefix}{folder prefix}
+
 \item{namespace_bucket}{boolean to create namespace bucket, set to FALSE to override bucket namespace}
 
-\item{build_metadata}{boolean to create metadata of bulk object retrieval from S3}
-
-\item{output_dir}{output directory from aws_s3_get parameter}
+\item{output_dir}{output directory from aws_s3_get parameter, this will be the destination if write_cache is set to \code{TRUE}}
 
 \item{...}{additional parameter from S3 get object}
 }

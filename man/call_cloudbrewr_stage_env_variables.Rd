@@ -10,7 +10,5 @@ call_cloudbrewr_stage_env_variables(pipeline_stage)
 \item{pipeline_stage}{choose production/develop stage}
 }
 \description{
-Retrieve environment variables used for
-S3 bucket namespace and profile name to
-your environment variables.
+Retrieve environment variables used for S3 bucket namespace and profile name to your environment variables.
 }

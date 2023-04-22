@@ -19,6 +19,47 @@ aws_s3_store <- function(filename, bucket, key, namespace_bucket = TRUE, ...){
   })
 }
 
-#' aws_s3_sync <- function(manifest){
-#'   #' bucket, key,
-#' }
+#' Bulk Store Object in DataBrew S3
+#' @param bucket s3 bucket to store data
+#' @param prefix (optional) folder prefix to store data
+#' @param namespace_bucket boolean to create namespace bucket, set to FALSE to override bucket namespace
+#' @param target_dir folder to sync with aws
+#'
+#' @importFrom magrittr %>%
+#'
+#' @return list of object s3 metadata and file location
+#' @export
+aws_s3_bulk_store <- function(bucket,
+                              prefix = NULL,
+                              namespace_bucket = TRUE,
+                              target_dir = NULL,
+                              ...){
+  # authenticate to s3
+  s3obj <- paws::s3()
+
+  # name space bucket
+  if(namespace_bucket){
+    bucket <- aws_namespace(bucket)
+  }
+
+  # create dir if not exist
+  if(!dir.exists(output_dir)){
+    dir.create(output_dir)
+  }
+
+  if(!is.null(prefix)){
+    bucket_args <- glue::glue('{target_dir} s3://{bucket}{prefix}')
+  }else{
+    bucket_args <- glue::glue('{target_dir} s3://{bucket}')
+  }
+
+  # running aws s3 sync
+  tryCatch({
+    logger::log_info('Running bulk download')
+    system2(command = "aws", args = c('s3 sync',  bucket_args))
+  }, error = function(e){
+    logger::log_error(e$message)
+    stop(e$message)
+  })
+}
+

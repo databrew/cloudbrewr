@@ -23,7 +23,8 @@ Imports:
   tibble,
   fs,
   cachem,
-  stringr
+  stringr,
+  logger
 Suggests: 
     knitr,
     rmarkdown

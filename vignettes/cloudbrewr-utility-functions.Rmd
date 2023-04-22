@@ -30,7 +30,7 @@ This function is used for doing bulk data retrieval
 ```{r}
 object <- cloudbrewr::aws_s3_bulk_get(
     bucket = 'bohemia-datalake',
-    Prefix = 'bohemia-minicensus'
+    prefix = 'bohemia-minicensus'
 )
 
 object
@@ -47,22 +47,12 @@ aws_s3_get_catalog(
   dplyr::select(Key, LastModified, Size)
 ```
 
-To narrow down your catalog search:
-```{r}
-aws_s3_get_catalog(
-  bucket = 'databrew.org',
-  Prefix = 'kwale/clean-form/') %>% 
-  head(5) %>% 
-  dplyr::select(Key, LastModified, Size)
-```
-
-
 ### Get S3 Object Versioning History
 This function is used to get an object versioning history (notated by VersionId) metadata
 ```{r}
 aws_s3_get_object_version_history(
   bucket = 'databrew.org', 
-  key = 'kwale/raw-form/reconaregistration/reconaregistration.csv') %>% 
+  key = 'kwale/recon/raw-form/reconaregistration/reconaregistration.csv') %>% 
   head(5) %>% 
   dplyr::select(Key, Size, LastModified, VersionId)
 ```
@@ -89,7 +79,7 @@ You can query the data into rowwwise format by running, indexed by `run_date` by
 ```{r}
 aws_s3_get_table_ts(
   bucket = 'databrew.org', 
-  key = 'kwale/anomalies/anomalies-identification-history/') %>% 
+  key = 'kwale/recon/anomalies/anomalies-identification-history/') %>% 
   head(5) %>% 
   dplyr::select(run_date,type)
 ```
@@ -98,7 +88,7 @@ You can also repurpose this to fetch specific date-range only to not over-extrac
 ```{r}
 aws_s3_get_table_ts(
   bucket = 'databrew.org', 
-  key = 'kwale/anomalies/anomalies-identification-history/',
+  key = 'kwale/recon/anomalies/anomalies-identification-history/',
   date_range = c('2023-01-01', '2023-01-05')) %>% 
   head(5) %>% 
   dplyr::select(run_date,type)

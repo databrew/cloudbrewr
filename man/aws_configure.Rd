@@ -4,7 +4,12 @@
 \alias{aws_configure}
 \title{Function to create SSO configuration}
 \usage{
-aws_configure(env)
+aws_configure(
+  profile_name,
+  role_name,
+  account_region = "us-east-1",
+  account_id = "354598940118"
+)
 }
 \arguments{
 \item{env}{environment variables}

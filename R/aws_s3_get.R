@@ -176,10 +176,9 @@ aws_s3_get_object <- function(bucket,
 
 #' Bulk Get Object in DataBrew S3
 #' @param bucket s3 bucket
+#' @param prefix folder prefix
 #' @param namespace_bucket boolean to create namespace bucket, set to FALSE to override bucket namespace
 #' @param output_dir output directory from aws_s3_get parameter, this will be the destination if write_cache is set to `TRUE`
-#' @param check_cache boolean, set to `TRUE` if you would like to check cache before download
-#' @param write_cache boolean, set to `TRUE` if you would like to write cache after download
 #' @param ... additional parameter from S3 get object
 #'
 #' @importFrom magrittr %>%
@@ -187,12 +186,10 @@ aws_s3_get_object <- function(bucket,
 #' @return list of object s3 metadata and file location
 #' @export
 aws_s3_bulk_get <- function(bucket,
+                            prefix = NULL,
                             namespace_bucket = TRUE,
                             output_dir = '~/.cloudbrewr_cache',
-                            check_cache = FALSE,
-                            write_cache = FALSE,
                             ...){
-  tryCatch({
     # authenticate to s3
     s3obj <- paws::s3()
 
@@ -206,54 +203,42 @@ aws_s3_bulk_get <- function(bucket,
       dir.create(output_dir)
     }
 
-    # list objects in s3
-    objs <- s3obj$list_objects_v2(Bucket = bucket, ...) %>%
-      .$Contents  %>%
-      purrr::map_dfr(function(row){
-        tibble::tibble(Key = row$Key,
-                       ETag = row$ETag)}) %>%
-      dplyr::distinct() %>%
-      dplyr::mutate(bucket = bucket,
-                    etag = stringr::str_replace_all(ETag, "[[:punct:]]", "")) %>%
-      dplyr::select(bucket,
-                    key = Key,
-                    etag)
-      # check cache
-      if(check_cache){
-        message('[CLOUDBREWR_LOGS]: Retrieving Cached Output')
-        d <- pull_cache(cache = output_dir)
-        objs <- objs %>%
-          dplyr::filter(!etag %in% d$keys())
-      }
+    if(!is.null(prefix)){
+      bucket_args <- glue::glue('s3://{bucket}{prefix} {output_dir}')
+    }else{
+      bucket_args <- glue::glue('s3://{bucket} {output_dir}')
+    }
 
 
-      msg_logs <- glue::glue('[CLOUDBREWR_LOGS]: Downloading {n_obj} Objects in S3..',
-                             n_obj = nrow(objs))
-      message(msg_logs)
+    # get object list
+    objs <- tryCatch({
+      s3obj$list_objects_v2(Bucket = bucket,
+                            Prefix = prefix) %>%
+        .$Contents  %>%
+        purrr::map_dfr(function(row){
+          tibble::tibble(Key = row$Key,
+                         ETag = row$ETag)}) %>%
+        dplyr::distinct() %>%
+        dplyr::mutate(bucket = bucket,
+                      etag = stringr::str_replace_all(ETag, "[[:punct:]]", "")) %>%
+        dplyr::select(bucket,
+                      key = Key,
+                      etag) %>%
+        dplyr::mutate(file_path = file.path(output_dir,basename(key)))
+    }, error = function(e){
+      logger::log_error(e$message)
+      stop(e$message)
+    })
 
-      if(nrow(objs) > 0){
-        # download using aws s3 get
-        output_file <- objs %>%
-          dplyr::mutate_all(as.character) %>%
-          purrr::pmap(
-            ~aws_s3_get_object(
-              bucket = ..1,
-              key = ..2,
-              namespace_bucket = FALSE,
-              output_dir = output_dir,
-              write_cache = write_cache,
-              check_cache = check_cache)) %>%
-          purrr::map_dfr(~.x) %>%
-          dplyr::mutate(file_path = fs::path_abs(file_path)) %>%
-          dplyr::rename(key = object_key) %>%
-          dplyr::select(file_path, etag, key, bucket)
-      }else{
-        output_file <- NULL
-      }
-      return(output_file)
-  }, error = function(err){
-    stop(err$message)
-  })
+    # running aws s3 sync
+    tryCatch({
+      logger::log_info('Running bulk download')
+      system2(command = "aws", args = c('s3 sync',  bucket_args))
+    }, error = function(e){
+      logger::log_error(e$message)
+      stop(e$message)
+    })
+    return(objs)
 }
 
 #' Get Metadata Headers

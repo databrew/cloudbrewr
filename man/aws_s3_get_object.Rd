@@ -4,16 +4,28 @@
 \alias{aws_s3_get_object}
 \title{Get Object in DataBrew S3}
 \usage{
-aws_s3_get_object(bucket, key, output_dir = NULL, namespace_bucket = TRUE, ...)
+aws_s3_get_object(
+  bucket,
+  key,
+  output_dir = "~/.cloudbrewr_cache",
+  namespace_bucket = TRUE,
+  check_cache = FALSE,
+  write_cache = FALSE,
+  ...
+)
 }
 \arguments{
-\item{bucket}{s3 bucket}
+\item{bucket}{s3 bucket name}
 
-\item{key}{s3 object key}
+\item{key}{s3 object key / s3 URI}
 
-\item{output_dir}{output directory, will create tempfile if set to null}
+\item{output_dir}{output directory from aws_s3_get parameter, this will be the destination if write_cache is set to \code{TRUE}}
 
 \item{namespace_bucket}{boolean to create namespace bucket, set to FALSE to override bucket namespace}
+
+\item{check_cache}{boolean, set to \code{TRUE} if you would like to check cache before download}
+
+\item{write_cache}{boolean, set to \code{TRUE} if you would like to write cache after download}
 
 \item{...}{additional parameter from S3 get object}
 }

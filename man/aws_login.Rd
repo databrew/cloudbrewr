@@ -4,10 +4,30 @@
 \alias{aws_login}
 \title{Utility Function to login to DataBrew AWS.}
 \usage{
-aws_login(pipeline_stage = "production")
+aws_login(
+  role_name = "cloudbrewr-aws-role",
+  profile_name = "dbrew-cloudbrewr-role",
+  access_key = NULL,
+  secret_access_key = NULL,
+  session_token = NULL,
+  account_region = "us-east-1",
+  pipeline_stage = "production"
+)
 }
 \arguments{
-\item{pipeline_stage}{(optional) choose production/develop stage}
+\item{role_name}{set role name based on SSO portal, this will be different based on different users but default values will be set to cloudbrewr-aws-role}
+
+\item{profile_name}{set profile name to save your SSO configuration locally, this will be different based on different users}
+
+\item{access_key}{retrieve from portal for access key access}
+
+\item{secret_access_key}{retrieve from portal for secret access key}
+
+\item{session_token}{retrieve fro portal}
+
+\item{account_region}{default to us-east-1}
+
+\item{pipeline_stage}{(DataBrew internal use for CI/CD) choose production/develop stage}
 }
 \value{
 metadata of AWS STS authentication (Account, Role)

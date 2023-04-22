@@ -4,7 +4,7 @@
 \alias{aws_sso_authenticate}
 \title{Function to initiate SSO authentication}
 \usage{
-aws_sso_authenticate(profile_name)
+aws_sso_authenticate(profile_name, account_id)
 }
 \arguments{
 \item{profile_name}{the profile name set to prod/dev}

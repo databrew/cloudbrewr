@@ -7,7 +7,7 @@
 aws_s3_get_catalog(bucket, namespace_bucket = TRUE, ...)
 }
 \arguments{
-\item{bucket}{s3 bucket}
+\item{bucket}{s3 bucket name}
 
 \item{namespace_bucket}{boolean to create namespace bucket, set to FALSE to override bucket namespace}
 
