@@ -42,11 +42,7 @@ aws_s3_bulk_store <- function(bucket,
     bucket <- aws_namespace(bucket)
   }
 
-  # create dir if not exist
-  if(!dir.exists(output_dir)){
-    dir.create(output_dir)
-  }
-
+  # target dir argument
   if(!is.null(prefix)){
     bucket_args <- glue::glue('{target_dir} s3://{bucket}{prefix}')
   }else{
