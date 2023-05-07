@@ -51,11 +51,13 @@ aws_s3_bulk_store <- function(bucket,
 
   # running aws s3 sync
   tryCatch({
-    logger::log_info('Running bulk download')
+    logger::log_info('Running Bulk Upload to S3')
     system2(command = "aws", args = c('s3 sync',  bucket_args))
   }, error = function(e){
     logger::log_error(e$message)
     stop(e$message)
   })
+
+  logger::log_success('Successful Bulk Upload to S3')
 }
 
