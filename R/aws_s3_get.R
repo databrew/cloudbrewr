@@ -94,7 +94,7 @@ aws_s3_get_object <- function(bucket,
 
     # create dir if not exist
     if(!dir.exists(output_dir)){
-      dir.create(output_dir)
+      dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
     }
 
     is_cached <- FALSE
@@ -200,7 +200,7 @@ aws_s3_bulk_get <- function(bucket,
 
     # create dir if not exist
     if(!dir.exists(output_dir)){
-      dir.create(output_dir)
+      dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
     }
 
     if(!is.null(prefix)){
