@@ -209,27 +209,6 @@ aws_s3_bulk_get <- function(bucket,
       bucket_args <- glue::glue('s3://{bucket} {output_dir}')
     }
 
-
-    # get object list
-    objs <- tryCatch({
-      s3obj$list_objects_v2(Bucket = bucket,
-                            Prefix = prefix) %>%
-        .$Contents  %>%
-        purrr::map_dfr(function(row){
-          tibble::tibble(Key = row$Key,
-                         ETag = row$ETag)}) %>%
-        dplyr::distinct() %>%
-        dplyr::mutate(bucket = bucket,
-                      etag = stringr::str_replace_all(ETag, "[[:punct:]]", "")) %>%
-        dplyr::select(bucket,
-                      key = Key,
-                      etag) %>%
-        dplyr::mutate(file_path = file.path(output_dir,basename(key)))
-    }, error = function(e){
-      logger::log_error(e$message)
-      stop(e$message)
-    })
-
     # running aws s3 sync
     tryCatch({
       logger::log_info('Running bulk download')
@@ -238,7 +217,6 @@ aws_s3_bulk_get <- function(bucket,
       logger::log_error(e$message)
       stop(e$message)
     })
-    return(objs)
 }
 
 #' Get Metadata Headers
