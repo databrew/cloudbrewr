@@ -15,15 +15,14 @@ aws_s3_get_catalog <- function(bucket,
     if(namespace_bucket){
       bucket <- aws_namespace(bucket)
     }
-    s3obj$list_objects_v2(Bucket = bucket, ...) %>%
+    s3obj$list_objects_v2(Bucket = bucket) %>%
       .$Contents %>%
-      purrr::map_dfr(~.x) %>%
-      dplyr::mutate(folder = dirname(Key)) %>%
-      tidyr::separate(folder,
-                      c("project",
-                        "pipeline_folder",
-                        "pipeline_subfolder"),
-                      sep = "/")
+      purrr::map_dfr(~tibble::tibble(bucket = bucket,
+                                     key = .x$Key,
+                                     etag = .x$ETag,
+                                     size = .x$Size,
+                                     last_modified = .x$LastModified)
+                     )
   }, error = function(e){
     stop(e$message)
   })
@@ -179,6 +178,7 @@ aws_s3_get_object <- function(bucket,
 #' @param prefix folder prefix
 #' @param namespace_bucket boolean to create namespace bucket, set to FALSE to override bucket namespace
 #' @param output_dir output directory from aws_s3_get parameter, this will be the destination if write_cache is set to `TRUE`
+#' @param exclude_prefix exclude prefix from s3 bucket
 #' @param ... additional parameter from S3 get object
 #'
 #' @importFrom magrittr %>%
@@ -189,6 +189,7 @@ aws_s3_bulk_get <- function(bucket,
                             prefix = NULL,
                             namespace_bucket = TRUE,
                             output_dir = '~/.cloudbrewr_cache',
+                            exclude_prefix = NULL,
                             ...){
     # authenticate to s3
     s3obj <- paws::s3()
@@ -207,6 +208,10 @@ aws_s3_bulk_get <- function(bucket,
       bucket_args <- glue::glue('s3://{bucket}{prefix} {output_dir}')
     }else{
       bucket_args <- glue::glue('s3://{bucket} {output_dir}')
+    }
+
+    if(!is.null(exclude_prefix)){
+      bucket_args <- glue::glue('{bucket_args} --exclude {exclude_prefix}')
     }
 
     # running aws s3 sync
