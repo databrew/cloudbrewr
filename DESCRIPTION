@@ -1,6 +1,6 @@
 Package: cloudbrewr
 Title: DataBrew Internal Tooling for AWS Data Load / Storage
-Version: 0.0.0.9000
+Version: 1.0.0.0000
 Authors@R: person("Aryton", "Tediarjo", email = "atediarjo@gmail.com",
                   role = c("aut", "cre"))
 Description: This package is used as an internal tool for interaction with data in AWS

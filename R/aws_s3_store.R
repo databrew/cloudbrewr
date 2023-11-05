@@ -13,7 +13,7 @@ aws_s3_store <- function(filename, bucket, key, namespace_bucket = TRUE, ...){
       bucket <- aws_namespace(bucket)
     }
     s3obj$put_object(Body = filename, Bucket = bucket, Key = key, ...)
-    message(glue::glue("[CLOUDBREWR_LOGS]: File is uploaded with in bucket:{bucket}; key:{key}"))
+    logger::log_info(as.character(glue::glue("File is uploaded with in bucket:{bucket}; key:{key}")))
   }, error = function(e){
     stop(e$message)
   })

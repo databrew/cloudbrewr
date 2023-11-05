@@ -1,21 +1,18 @@
 #' Function to get prod/dev stage environment variables,
 #' @description Retrieve environment variables used for S3 bucket namespace and profile name to your environment variables.
 #' @param pipeline_stage choose production/develop stage
-call_cloudbrewr_stage_env_variables <- function(pipeline_stage){
-  if(pipeline_stage == 'develop'){
-    list(
-      account_id = '381386504386',
-      profile_name = 'databrew-dev',
-      bucket_prefix = 'databrew-testing-')
-  }else if(pipeline_stage == 'production'){
-    list(
-      account_id = '354598940118',
-      profile_name = 'databrew-prod',
-      bucket_prefix = ''
-    )
-  }else{
-    stop("[CLOUDBREWR_LOGS]: Please set stage parameter as 'production' or 'develop'")
-  }
+call_cloudbrewr_stage_env_variables <- function(account_id, profile_name, bucket_prefix){
+  Sys.setenv(BUCKET_PREFIX = bucket_prefix)
+  Sys.setenv(PROFILE_NAME = profile_name)
+  Sys.setenv(ACCOUNT_ID = account_id)
+
+  aws_env <-   list(
+    account_id = account_id,
+    profile_name = profile_name,
+    bucket_prefix = bucket_prefix
+  )
+
+  return(aws_env)
 }
 
 
@@ -25,10 +22,7 @@ call_cloudbrewr_stage_env_variables <- function(pipeline_stage){
 #' @param bucket databrew s3 bucket
 #' @return namspaced buckeet
 aws_namespace <- function(bucket){
-  sts <- paws::sts()
-  aws_caller <- sts$get_caller_identity()
-  aws_env <- call_cloudbrewr_stage_env_variables(pipeline_stage = Sys.getenv('PIPELINE_STAGE'))
-  bucket_with_namespace <- glue::glue("{aws_env$bucket_prefix}", bucket)
+  bucket_with_namespace <- glue::glue("{Sys.getenv('BUCKET_PREFIX')}", bucket)
   return(bucket_with_namespace)
 }
 
