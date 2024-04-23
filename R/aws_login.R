@@ -75,7 +75,7 @@ check_aws_access <-  function(){
 #' @export
 aws_login <- function(role_name,
                       profile_name,
-                      pipeline_stage,
+                      pipeline_stage='production',
                       account_id=NULL,
                       account_region=NULL,
                       access_key = NULL,
