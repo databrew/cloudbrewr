@@ -120,6 +120,7 @@ aws_login <- function(role_name,
     check_aws_access()
   }, error = function(e){
     logger::log_info('User not logged in: Attempting Login...')
+    return(NULL)
   })
 
   if(!is.null(creds)){
