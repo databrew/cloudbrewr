@@ -121,7 +121,7 @@ sso_role_name = readOnly
 region = us-west-2
 output = json
 ```
-3. Log in as usual
+3. Restart everything (R, Command Prompt) and log in as usual
 
 
 ## Contribute
