@@ -87,7 +87,7 @@ To read more about other features, check out our team Vignettes here in [Github 
 
 ## Troubleshooting & FAQs
 
-Not able to authenticate?
+#### FAQ1: Not able to authenticate?
 
 1.  Check \~/.aws/config and see whether you do not have the same profile name with different AWS Account set up, as this package will append to your config file
 
@@ -106,7 +106,7 @@ Clarify that your account is DataBrew AWS Account `354598940118`
 3. For further issues, post to [Github Issues](https://github.com/databrew/cloudbrewr/issues)
 
 
-Issues with authenticating in Windows?
+#### FAQ2: Issues with authenticating in Windows?
 
 Although this is an edge-case issue, this issue can happen due to the improper `aws configure` process, where AWS profile information parsed by this package is not written to `.aws/config` file. Thus user will be required to do manual setup by creating both the folder and file in their home directory.
 
