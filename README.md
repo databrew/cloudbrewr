@@ -111,7 +111,7 @@ Clarify that your account is DataBrew AWS Account `354598940118`
 Although this is an edge-case issue, this issue can happen due to the improper `aws configure` process, where AWS profile information parsed by this package is not written to `.aws/config` file. Thus user will be required to do manual setup by creating both the folder and file in their home directory.
 
 1. In the home directory, create a folder named `.aws` and a create an empty text file name `config` under it
-2. Add this SSO settings, based on known parameter
+2. Add this SSO settings, based on your parameter into the `config` file
 ```
 [profile my-dev-profile]
 sso_start_url = https://my-sso-portal.awsapps.com/start
