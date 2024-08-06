@@ -15,7 +15,7 @@ aws_s3_get_catalog <- function(bucket,
     if(namespace_bucket){
       bucket <- aws_namespace(bucket)
     }
-    s3obj$list_objects_v2(Bucket = bucket) %>%
+    s3obj$list_objects_v2(Bucket = bucket, ...) %>%
       .$Contents %>%
       purrr::map_dfr(~tibble::tibble(bucket = bucket,
                                      key = .x$Key,
