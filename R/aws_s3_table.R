@@ -70,6 +70,7 @@ aws_s3_get_table <- function(bucket,
     key,
     namespace_bucket = namespace_bucket)
   table <- fread(object_metadata$file_path) %>%
-    tibble::as_tibble()
+    tibble::as_tibble() %>%
+    mutate(across(where(is.character), ~ na_if(.,"")))
   return(table)
 }
