@@ -87,7 +87,7 @@ aws_login <- function(role_name,
 
   # instantiate pipeline stage
   Sys.setenv(PIPELINE_STAGE = pipeline_stage)
-  if(pipeline_stage == 'develop') {
+  if(pipeline_stage == 'bohemia-develop') {
     aws_env <- call_cloudbrewr_stage_env_variables(account_id = '381386504386',
                                                    profile_name = 'databrew-dev',
                                                    bucket_prefix = 'databrew-testing-')
@@ -96,7 +96,7 @@ aws_login <- function(role_name,
     account_id <- aws_env$account_id
     profile_name <- aws_env$profile_name
     role_name <- 'AdministratorAccess'
-  }else if(pipeline_stage == 'production') {
+  }else if(pipeline_stage == 'bohemia-production') {
     aws_env <- call_cloudbrewr_stage_env_variables(account_id = '354598940118',
                                                    profile_name = 'databrew-prod',
                                                    bucket_prefix = '')
