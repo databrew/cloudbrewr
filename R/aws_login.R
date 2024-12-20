@@ -89,7 +89,7 @@ aws_login <- function(role_name,
   Sys.setenv(PIPELINE_STAGE = pipeline_stage)
   if(pipeline_stage == 'bohemia-develop') {
     aws_env <- call_cloudbrewr_stage_env_variables(account_id = '381386504386',
-                                                   profile_name = 'databrew-dev',
+                                                   profile_name = 'bohemia-dev',
                                                    bucket_prefix = 'databrew-testing-')
     sso_start_url <- 'https://databrewllc.awsapps.com/start'
     account_region <- sso_region <- 'us-east-1'
@@ -98,7 +98,7 @@ aws_login <- function(role_name,
     role_name <- 'AdministratorAccess'
   }else if(pipeline_stage == 'bohemia-production') {
     aws_env <- call_cloudbrewr_stage_env_variables(account_id = '354598940118',
-                                                   profile_name = 'databrew-prod',
+                                                   profile_name = 'bohemia-prod',
                                                    bucket_prefix = '')
     sso_start_url <- 'https://databrewllc.awsapps.com/start'
     account_region <- sso_region <- 'us-east-1'
@@ -109,6 +109,8 @@ aws_login <- function(role_name,
     aws_env <- call_cloudbrewr_stage_env_variables(account_id = account_id,
                                                    profile_name = profile_name,
                                                    bucket_prefix = bucket_prefix)
+    sso_start_url <- 'https://databrewllc.awsapps.com/start'
+    account_region <- sso_region <- 'us-east-1'
     role_name <- role_name
     profile_name <- profile_name
     account_id <- aws_env$account_id
